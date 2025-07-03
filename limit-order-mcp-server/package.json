@@ -1,0 +1,42 @@
+{
+  "name": "@dbotx/limit-order-mcp-server",
+  "version": "1.0.0",
+  "description": "Limit Order MCP Server - Supporting multi-chain limit orders, precise price triggers, and flexible order management. A professional cross-chain MCP trading service supporting DEX trading on multiple chains including Solana, Ethereum, BSC and more.",
+  "keywords": ["mcp", "dbot", "limit-order", "trading", "crypto", "blockchain", "DEX", "DeFi", "cross-chain", "solana", "ethereum", "bsc", "web3"],
+  "author": "dbotx",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "bin": {
+    "limit-order-mcp-server": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.0",
+    "axios": "^1.6.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbotx/dbot-mcp-servers",
+    "directory": "limit-order-mcp-server"
+  },
+  "homepage": "https://github.com/dbotx/dbot-mcp-servers/tree/main/limit-order-mcp-server",
+  "publishConfig": {
+    "access": "public"
+  }
+} 
