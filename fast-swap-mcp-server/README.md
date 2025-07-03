@@ -36,6 +36,7 @@ Add to your MCP client configuration:
   }
 }
 ```
+**Get your api-key and wallet-id at [www.dbotx.com](https://www.dbotx.com)**
 
 ## 📚 Typical Scenarios
 

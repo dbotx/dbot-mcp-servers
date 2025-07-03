@@ -40,6 +40,7 @@
   }
 }
 ```
+**api-key 与 wallet-id 获取地址 [www.dbotx.com](https://www.dbotx.com)**
 
 
 ## 📚 典型场景
