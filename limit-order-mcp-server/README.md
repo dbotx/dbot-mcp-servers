@@ -1,7 +1,7 @@
 [English](./README.md) | [中文](./README.zh-CN.md)
 
 
-# Professional Multi-Chain DEX Limit Order MCP Service
+# Professional Multi-Chain DEX Trading Server
 
 Limit Order MCP Server - Supporting multi-chain limit orders, precise price triggers, and flexible order management. A professional cross-chain MCP trading service supporting DEX trading on multiple mainstream blockchains including Solana, Ethereum, BSC and more.
 
@@ -213,4 +213,4 @@ MIT License
 
 ## Support
 
-For issues or suggestions, please visit [GitHub Issues](https://github.com/dbot-team/dbot-mcp-servers/issues). 
+For issues or suggestions, please visit [GitHub Issues](https://github.com/dbotx/dbot-mcp-servers/issues). 

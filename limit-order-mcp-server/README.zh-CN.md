@@ -1,6 +1,6 @@
 [English](./README.md) | [中文](./README.zh-CN.md)
 
-# 专业的多链 DEX 限价交易 MCP 服务
+# 专业的多链 DEX 交易 MCP 服务
 
 限价单 MCP Server - 支持多链限价买卖，精准价格触发，灵活订单管理。专业的跨链 MCP 交易服务，支持 Solana、Ethereum、BSC 等多条主流区块链的 DEX 交易。
 
