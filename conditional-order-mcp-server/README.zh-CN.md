@@ -25,7 +25,7 @@
   "mcpServers": {
     "conditional-order": {
       "command": "npx",
-      "args": ["-y", "@dbotx/conditional-order-mcp-server"],
+      "args": ["-y", "@dbotx/conditional-order-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
         "DBOT_WALLET_ID": "your-wallet-id"
