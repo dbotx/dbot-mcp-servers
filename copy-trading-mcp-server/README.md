@@ -301,20 +301,6 @@ Get copy trading task list
 }
 ```
 
-## Supported DEXs
-
-### Solana
-- raydium_amm, raydium_clmm, raydium_cpmm, raydium_launchpad
-- meteora_dlmm, meteora_dyn, meteora_dyn2, meteora_bc
-- pump, pump_swap, moonshot, orca_wp
-
-### Ethereum/Base/BSC
-- uniswap_v2, uniswap_v3, pancake_v2, pancake_v3
-- ether_vista, okx_v2, fourmeme, boop
-
-### Tron
-- sunswap_v2, sunpump
-
 ## Copy Trading Mechanism Description
 
 ### Buy Types
