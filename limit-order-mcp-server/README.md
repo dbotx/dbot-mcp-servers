@@ -1,7 +1,7 @@
 [English](./README.md) | [中文](./README.zh-CN.md)
 
 
-# Professional Multi-Chain DEX Trading Server
+# Professional Multi-Chain DEX Trading MCP Server
 
 Limit Order MCP Server - Supporting multi-chain limit orders, precise price triggers, and flexible order management. A professional cross-chain MCP trading service supporting DEX trading on multiple mainstream blockchains including Solana, Ethereum, BSC and more.
 
