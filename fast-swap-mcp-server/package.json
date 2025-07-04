@@ -1,6 +1,6 @@
 {
-  "name": "@dbotx/fast-swap-mcp",
-  "version": "1.0.1",
+  "name": "@dbotx/fast-swap-mcp-server",
+  "version": "1.0.0",
   "description": "Fast Swap MCP Server - Supports quickly initiating token buy/sell tasks, querying transaction results, and managing take-profit/stop-loss tasks.",
   "keywords": [
     "mcp",
