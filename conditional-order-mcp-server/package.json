@@ -1,0 +1,39 @@
+{
+  "name": "@dbotx/conditional-order-mcp-server",
+  "version": "1.0.0",
+  "description": "Conditional Order MCP Server - Supports creating and managing conditional orders, automatically executing trades based on specific conditions",
+  "keywords": ["mcp", "dbot", "conditional-order", "trading", "crypto", "blockchain", "DEX", "DeFi", "cross-chain", "solana", "ethereum", "bsc", "web3"],
+  "author": "dbotx",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "bin": {
+    "conditional-order-mcp-server": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.0",
+    "axios": "^1.6.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbotx/dbot-mcp-servers",
+    "directory": "conditional-order-mcp-server"
+  },
+  "homepage": "https://github.com/dbotx/dbot-mcp-servers/tree/main/conditional-order-mcp-server"
+} 

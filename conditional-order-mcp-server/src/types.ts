@@ -1,0 +1,175 @@
+import { z } from 'zod';
+
+// Helper function to get default values from environment variables
+function getEnvDefault<T>(envKey: string, defaultValue: T, transform?: (value: string) => T): T {
+  const envValue = process.env[envKey];
+  if (envValue === undefined) {
+    return defaultValue;
+  }
+  if (transform) {
+    try {
+      return transform(envValue);
+    } catch (e) {
+      console.warn(`Warning: Invalid value for ${envKey}, using default value`);
+      return defaultValue;
+    }
+  }
+  return envValue as unknown as T;
+}
+
+// Base type definitions
+export const ChainSchema = z.enum(['solana']);
+export const PairTypeSchema = z.enum(['pump', 'raydium_amm']);
+export const TradeTypeSchema = z.enum(['sell']);
+
+export type Chain = z.infer<typeof ChainSchema>;
+export type PairType = z.infer<typeof PairTypeSchema>;
+export type TradeType = z.infer<typeof TradeTypeSchema>;
+
+// Request to create a sell-on-open order
+export const CreateMigrateOrderRequestSchema = z.object({
+  chain: ChainSchema.default(getEnvDefault('DBOT_CHAIN', 'solana')),
+  pairType: PairTypeSchema.default('pump'),
+  pair: z.string().min(1),
+  walletId: z.string().min(1),
+  tradeType: TradeTypeSchema.default('sell'),
+  amountOrPercent: z.number().min(0).max(1),
+  customFeeAndTip: z.boolean().default(getEnvDefault('DBOT_CUSTOM_FEE_AND_TIP', false, (v) => v === 'true')),
+  priorityFee: z.string().default(getEnvDefault('DBOT_PRIORITY_FEE', '')),
+  jitoEnabled: z.boolean().default(getEnvDefault('DBOT_JITO_ENABLED', true, (v) => v === 'true')),
+  jitoTip: z.number().min(0).default(getEnvDefault('DBOT_JITO_TIP', 0.001, Number)),
+  expireDelta: z.number().int().min(0).max(432000000).default(getEnvDefault('DBOT_EXPIRE_DELTA', 360000000, Number)),
+  maxSlippage: z.number().min(0).max(1).default(getEnvDefault('DBOT_MAX_SLIPPAGE', 0.1, Number)),
+  concurrentNodes: z.number().int().min(1).max(3).default(getEnvDefault('DBOT_CONCURRENT_NODES', 2, Number)),
+  retries: z.number().int().min(0).max(10).default(getEnvDefault('DBOT_RETRIES', 1, Number)),
+});
+
+export type CreateMigrateOrderRequest = z.infer<typeof CreateMigrateOrderRequestSchema>;
+
+// Request to create a follow-dev-sell order
+export const CreateDevOrderRequestSchema = z.object({
+  chain: ChainSchema.default(getEnvDefault('DBOT_CHAIN', 'solana')),
+  pairType: PairTypeSchema.default('pump'),
+  pair: z.string().min(1),
+  walletId: z.string().min(1),
+  tradeType: TradeTypeSchema.default('sell'),
+  minDevSellPercent: z.number().min(0).max(1).default(getEnvDefault('DBOT_MIN_DEV_SELL_PERCENT', 0.5, Number)),
+  amountOrPercent: z.number().min(0).max(1),
+  customFeeAndTip: z.boolean().default(getEnvDefault('DBOT_CUSTOM_FEE_AND_TIP', false, (v) => v === 'true')),
+  priorityFee: z.string().default(getEnvDefault('DBOT_PRIORITY_FEE', '')),
+  jitoEnabled: z.boolean().default(getEnvDefault('DBOT_JITO_ENABLED', true, (v) => v === 'true')),
+  jitoTip: z.number().min(0).default(getEnvDefault('DBOT_JITO_TIP', 0.001, Number)),
+  expireDelta: z.number().int().min(0).max(432000000).default(getEnvDefault('DBOT_EXPIRE_DELTA', 360000000, Number)),
+  maxSlippage: z.number().min(0).max(1).default(getEnvDefault('DBOT_MAX_SLIPPAGE', 0.1, Number)),
+  concurrentNodes: z.number().int().min(1).max(3).default(getEnvDefault('DBOT_CONCURRENT_NODES', 2, Number)),
+  retries: z.number().int().min(0).max(10).default(getEnvDefault('DBOT_RETRIES', 1, Number)),
+});
+
+export type CreateDevOrderRequest = z.infer<typeof CreateDevOrderRequestSchema>;
+
+// Request to update a sell-on-open order
+export const UpdateMigrateOrderRequestSchema = z.object({
+  id: z.string().min(1),
+  chain: ChainSchema.default('solana'),
+  pairType: PairTypeSchema.default('pump'),
+  pair: z.string().min(1),
+  walletId: z.string().min(1),
+  tradeType: TradeTypeSchema.default('sell'),
+  amountOrPercent: z.number().min(0).max(1),
+  customFeeAndTip: z.boolean().default(false),
+  priorityFee: z.string().default(''),
+  jitoEnabled: z.boolean().default(true),
+  jitoTip: z.number().min(0).default(0.001),
+  expireDelta: z.number().int().min(0).max(432000000).default(360000000),
+  maxSlippage: z.number().min(0).max(1).default(0.1),
+  concurrentNodes: z.number().int().min(1).max(3).default(2),
+  retries: z.number().int().min(0).max(10).default(1),
+});
+
+export type UpdateMigrateOrderRequest = z.infer<typeof UpdateMigrateOrderRequestSchema>;
+
+// Request to update a follow-dev-sell order
+export const UpdateDevOrderRequestSchema = z.object({
+  id: z.string().min(1),
+  chain: ChainSchema.default('solana'),
+  pairType: PairTypeSchema.default('pump'),
+  pair: z.string().min(1),
+  walletId: z.string().min(1),
+  tradeType: TradeTypeSchema.default('sell'),
+  minDevSellPercent: z.number().min(0).max(1).default(0.5),
+  amountOrPercent: z.number().min(0).max(1),
+  customFeeAndTip: z.boolean().default(false),
+  priorityFee: z.string().default(''),
+  jitoEnabled: z.boolean().default(true),
+  jitoTip: z.number().min(0).default(0.001),
+  expireDelta: z.number().int().min(0).max(432000000).default(360000000),
+  maxSlippage: z.number().min(0).max(1).default(0.1),
+  concurrentNodes: z.number().int().min(1).max(3).default(2),
+  retries: z.number().int().min(0).max(10).default(1),
+});
+
+export type UpdateDevOrderRequest = z.infer<typeof UpdateDevOrderRequestSchema>;
+
+// Request to toggle an order
+export const ToggleOrderRequestSchema = z.object({
+  id: z.string().min(1),
+  enabled: z.boolean(),
+});
+
+export type ToggleOrderRequest = z.infer<typeof ToggleOrderRequestSchema>;
+
+// API response type
+export interface ApiResponse<T = any> {
+  err: boolean;
+  res: T;
+  docs: string;
+}
+
+export interface OrderResponse {
+  id: string;
+}
+
+export interface OrderInfo {
+  id: string;
+  chain: string;
+  pairType: string;
+  pair: string;
+  walletId: string;
+  tradeType: string;
+  amountOrPercent: number;
+  enabled: boolean;
+  state: 'init' | 'processing' | 'done' | 'fail' | 'expired';
+  createdAt?: string;
+  updatedAt?: string;
+  errorCode?: string;
+  errorMessage?: string;
+}
+
+// Task list query parameters
+export const GetOrdersRequestSchema = z.object({
+  page: z.number().int().min(0).default(0),
+  size: z.number().int().min(1).max(100).default(20),
+  chain: ChainSchema.default('solana'),
+  state: z.enum(['init', 'processing', 'done', 'fail', 'expired']).optional(),
+  source: z.string().optional(),
+});
+
+export type GetOrdersRequest = z.infer<typeof GetOrdersRequestSchema>;
+
+// Extended task info type for different order types
+export interface MigrateOrderInfo extends OrderInfo {
+  // Fields specific to sell-on-open orders
+}
+
+export interface DevOrderInfo extends OrderInfo {
+  // Fields specific to follow-dev-sell orders
+  minDevSellPercent: number;
+}
+
+// Task list response type
+export interface OrdersListResponse {
+  orders: OrderInfo[];
+  total: number;
+  page: number;
+  size: number;
+} 
