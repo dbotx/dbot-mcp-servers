@@ -1,11 +1,11 @@
 [English](./README.md) | [中文](./README.zh-CN.md)
 
 
-# 专业的多链 DEX 限价交易 MCP 服务
+# 专业的多链 DEX 交易 MCP 服务
 
 快速买卖 MCP Server - 支持快速发起买卖代币任务，查询交易结果，管理止盈止损任务。
 
-由 DBot 驱动 - [www.dbotx.com](https://www.dbotx.com)
+由 DBot 强力驱动 - [www.dbotx.com](https://www.dbotx.com)
 
 
 ## 🚀 功能特性
@@ -295,7 +295,7 @@
 
 ## 📚 API文档
 
-完整的API文档请参考：https://api-bot-v1.dbotx.com/docs
+完整的API文档请参考：[DBot API](https://dbotx.com/docs).
 
 
 ## 📄 许可证
@@ -305,4 +305,4 @@ MIT
 
 ## 💡 支持
 
-如有问题或建议，请访问：https://github.com/dbot-team/dbot-mcp-servers
+如有问题或建议，请访问：[GitHub Issues](https://github.com/dbotx/dbot-mcp-servers/issues). 

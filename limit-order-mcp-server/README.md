@@ -207,10 +207,14 @@ Query the list of limit orders.
 6.  It's configurable whether to force execution at market price upon expiration.
 
 
-## License
+## 📚 API Documentation
+
+For complete API documentation, please refer to: [DBot API](https://dbotx.com/docs).
+
+## 📄 License
 
 MIT License
 
-## Support
+## 💡 Support
 
 For issues or suggestions, please visit [GitHub Issues](https://github.com/dbotx/dbot-mcp-servers/issues). 

@@ -206,10 +206,16 @@
 6. 可配置到期时是否按市价强制执行
 
 
-## 许可证
+## 📚 API文档
 
-MIT License
+完整的API文档请参考：[DBot API](https://dbotx.com/docs).
 
-## 支持
 
-如有问题或建议，请访问 [GitHub Issues](https://github.com/dbot-team/dbot-mcp-servers/issues) 
+## 📄 许可证
+
+MIT
+
+
+## 💡 支持
+
+如有问题或建议，请访问：[GitHub Issues](https://github.com/dbotx/dbot-mcp-servers/issues). 

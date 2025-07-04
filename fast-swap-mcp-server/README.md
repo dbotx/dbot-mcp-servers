@@ -1,6 +1,6 @@
 [English](./README.md) | [中文](./README.zh-CN.md)
 
-# Professional Multi-Chain DEX Limit Order MCP Service
+# Professional Multi-Chain DEX Trading MCP Server
 
 Fast Swap MCP Server - Supports quickly initiating token buy/sell tasks, querying transaction results, and managing take-profit/stop-loss tasks.
 
@@ -41,11 +41,11 @@ Add to your MCP client configuration:
 ## 📚 Typical Scenarios
 
 - **Quick Buy**:
-  - "Help me buy token 9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump on Solana for 0.001 SOL."
+  - "Help me buy token {{token_address}} on Solana for 0.001 SOL."
 - **Quick Sell**:
-  - "Help me sell 50% of my position in token 9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump on Solana."
+  - "Help me sell 50% of my position in token {{token_address}} on Solana."
 - **Buy and Set Take-Profit/Stop-Loss**:
-  - "Help me buy token 9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump on Solana for 0.001 SOL, sell 60% when the price rises by 80%, and sell 80% when it falls by 30%."
+  - "Help me buy token {{token_address}} on Solana for 0.001 SOL, sell 60% when the price rises by 80%, and sell 80% when it falls by 30%."
 - **Modify Take-Profit/Stop-Loss**:
   - "Help me change the stop-loss order to sell 100% of the position."
 - **Manage Take-Profit/Stop-Loss**:
@@ -285,14 +285,12 @@ Delete a take-profit/stop-loss order created by a fast swap.
 
 ## 📚 API Documentation
 
-For the complete API documentation, please refer to: https://api-bot-v1.dbotx.com/docs
-
+For complete API documentation, please refer to: [DBot API](https://dbotx.com/docs).
 
 ## 📄 License
 
-MIT
-
+MIT License
 
 ## 💡 Support
 
-For issues or suggestions, please visit: https://github.com/dbot-team/dbot-mcp-servers 
+For issues or suggestions, please visit [GitHub Issues](https://github.com/dbotx/dbot-mcp-servers/issues). 
