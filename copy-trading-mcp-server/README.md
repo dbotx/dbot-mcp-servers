@@ -46,6 +46,8 @@ Add to MCP client configuration:
 
 - **Basic Copy Trading**:
   - "Help me create a copy trading task to follow wallet address {{address}}'s trades on Solana, with a maximum buy of 0.1 SOL each time."
+- **Modify Copy Trading**:
+  - "Help me modify the copy trading task, change the maximum buy to 0.2 SOL each time, sell 50% when the price rises by 100%, and stop loss at a 30% drop."
 - **Smart Copy Trading + Take-Profit/Stop-Loss**:
   - "Create a copy trading task to follow address {{address}}, set a maximum buy of 0.5 SOL, automatically sell when the price rises by 200%, and stop loss at a 30% drop."
 - **Multi-target Copy Trading**:
