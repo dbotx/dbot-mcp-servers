@@ -1,0 +1,42 @@
+{
+  "name": "@dbotx/copy-trading-mcp-server",
+  "version": "1.0.0",
+  "description": "Copy Trading MCP Server - Supports creating and managing complex copy trading tasks, automatically following other users' trading strategies",
+  "keywords": ["mcp", "dbot", "copy-trading", "trading", "crypto", "blockchain", "DEX", "DeFi", "cross-chain", "solana", "ethereum", "bsc", "tron", "base", "smart-money"],
+  "author": "dbotx",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "bin": {
+    "copy-trading-mcp-server": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.0",
+    "axios": "^1.6.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbotx/dbot-mcp-servers",
+    "directory": "copy-trading-mcp-server"
+  },
+  "homepage": "https://github.com/dbotx/dbot-mcp-servers/tree/main/copy-trading-mcp-server",
+  "publishConfig": {
+    "access": "public"
+  }
+} 
