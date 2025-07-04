@@ -46,11 +46,11 @@
 ## 📚 典型场景
 
 - **快速买入**：
-  - "帮我买入 solana 上的代币 9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump 0.001sol"
+  - "帮我买入 solana 上的代币 {{代币地址}}  0.001sol"
 - **快速卖出**：
-  - "帮我卖出 solana 上的代币 9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump 50%仓位"
+  - "帮我卖出 solana 上的代币 {{代币地址}}  50%仓位"
 - **买入并设置止盈止损**：
-  - "帮我买入 solana 上的代币 9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump 0.001sol，价格上涨80%时卖出60%仓位，下跌30%时卖出80%仓位"
+  - "帮我买入 solana 上的代币 {{代币地址}}  0.001sol，价格上涨80%时卖出60%仓位，下跌30%时卖出80%仓位"
 - **修改止盈止损**：
   - "帮我将止损单改为卖出100%仓位"
 - **管理止盈止损**：
