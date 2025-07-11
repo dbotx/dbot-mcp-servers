@@ -67,16 +67,16 @@ Here are the environment variables explained:
 - All environment variable defaults can be overridden during the conversation. For example, if the system's default is to enable anti-sandwich mode, you can request to override it by saying, "Create a limit order..., please disable anti-sandwich mode."
 
 #### Basic Configuration
-- `DBOT_CHAIN`: Default chain type (solana/ethereum/base/bsc/tron)
-- `DBOT_CUSTOM_FEE_AND_TIP`: Whether to use custom fees (true/false)
-- `DBOT_PRIORITY_FEE`: Priority fee, e.g., "0.0001"
-- `DBOT_GAS_FEE_DELTA`: Gas fee increment, e.g., 5
-- `DBOT_MAX_FEE_PER_GAS`: Maximum gas fee, e.g., 100
-- `DBOT_JITO_ENABLED`: Whether to enable anti-sandwich mode (true/false)
-- `DBOT_JITO_TIP`: Anti-sandwich tip, e.g., 0.001
-- `DBOT_MAX_SLIPPAGE`: Maximum slippage (0.00-1.00), e.g., 0.1
-- `DBOT_CONCURRENT_NODES`: Number of concurrent nodes (1-3), e.g., 2
-- `DBOT_RETRIES`: Number of retries (0-10), e.g., 1
+- `DBOT_CHAIN`: Default chain type (solana/ethereum/base/bsc/tron), default value is "solana"
+- `DBOT_CUSTOM_FEE_AND_TIP`: Whether to use custom fees, default value is false
+- `DBOT_PRIORITY_FEE`: Priority fee, default value is "0.0001"
+- `DBOT_GAS_FEE_DELTA`: Gas fee increment, default value is 5
+- `DBOT_MAX_FEE_PER_GAS`: Maximum gas fee, default value is 100
+- `DBOT_JITO_ENABLED`: Whether to enable anti-sandwich mode, default value is true
+- `DBOT_JITO_TIP`: Anti-sandwich tip, default value is 0.001
+- `DBOT_MAX_SLIPPAGE`: Maximum slippage (0.00-1.00), default value is 0.1
+- `DBOT_CONCURRENT_NODES`: Number of concurrent nodes (1-3), default value is 2
+- `DBOT_RETRIES`: Number of retries (0-10), default value is 1
 
 **Example:**
 
@@ -100,9 +100,9 @@ Here are the environment variables explained:
 ```
 
 #### Limit Order Configuration
-- `DBOT_EXPIRE_DELTA`: Task validity duration (in milliseconds), e.g., 432000000
-- `DBOT_EXPIRE_EXECUTE`: Whether to execute at market price upon task expiration (true/false)
-- `DBOT_USE_MID_PRICE`: Whether to use anti-spike mode (true/false)
+- `DBOT_EXPIRE_DELTA`: Task validity duration (in milliseconds), default value is 432000000
+- `DBOT_EXPIRE_EXECUTE`: Whether to execute at market price upon task expiration, default value is false
+- `DBOT_USE_MID_PRICE`: Whether to use anti-spike mode, default value is false
 
 **Example:**
 

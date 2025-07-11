@@ -73,16 +73,16 @@
 - 所有环境变量默认值均可在对话时被覆盖。例如 系统默认开启防夹模式，对话时可要求将其覆盖，"买入 ....，请关闭防夹模式。"
 
 #### 基础配置
-- `DBOT_CHAIN`: 默认链类型 (solana/ethereum/base/bsc/tron)
-- `DBOT_CUSTOM_FEE_AND_TIP`: 是否使用自定义费用 (true/false)
-- `DBOT_PRIORITY_FEE`: 优先费，例如："0.0001"
-- `DBOT_GAS_FEE_DELTA`: gas费用增量，例如：5
-- `DBOT_MAX_FEE_PER_GAS`: 最大gas费用，例如：100
-- `DBOT_JITO_ENABLED`: 是否启用防夹模式 (true/false)
-- `DBOT_JITO_TIP`: 防夹小费，例如：0.001
-- `DBOT_MAX_SLIPPAGE`: 最大滑点 (0.00-1.00)，例如：0.1
-- `DBOT_CONCURRENT_NODES`: 并发节点数 (1-3)，例如：2
-- `DBOT_RETRIES`: 重试次数 (0-10)，例如：1
+- `DBOT_CHAIN`: 默认链类型 (solana/ethereum/base/bsc/tron)，默认值为 "solana"
+- `DBOT_CUSTOM_FEE_AND_TIP`: 是否使用自定义费用，默认值为 false
+- `DBOT_PRIORITY_FEE`: 优先费，默认值为 "0.0001"
+- `DBOT_GAS_FEE_DELTA`: gas费用增量，默认值为 5
+- `DBOT_MAX_FEE_PER_GAS`: 最大gas费用，默认值为 100
+- `DBOT_JITO_ENABLED`: 是否启用防夹模式，默认值为 true
+- `DBOT_JITO_TIP`: 防夹小费，默认值为 0.001
+- `DBOT_MAX_SLIPPAGE`: 最大滑点 (0.00-1.00)，默认值为 0.1
+- `DBOT_CONCURRENT_NODES`: 并发节点数 (1-3)，默认值为 2
+- `DBOT_RETRIES`: 重试次数 (0-10)，默认值为 1
 
 **示例：**
 
@@ -106,10 +106,10 @@
 ```
 
 #### 交易配置
-- `DBOT_AMOUNT_OR_PERCENT`: 默认交易数量或百分比，例如：0.001
-- `DBOT_MIGRATE_SELL_PERCENT`: 迁移卖出百分比 (0.00-1.00)，例如：1.0
-- `DBOT_MIN_DEV_SELL_PERCENT`: 最小开发者卖出百分比 (0.00-1.00)，例如：0.5
-- `DBOT_DEV_SELL_PERCENT`: 开发者卖出百分比 (0.00-1.00)，例如：1.0
+- `DBOT_AMOUNT_OR_PERCENT`: 默认交易数量或百分比，默认值为 0.001
+- `DBOT_MIGRATE_SELL_PERCENT`: 迁移卖出百分比 (0.00-1.00)，默认值为 1.0
+- `DBOT_MIN_DEV_SELL_PERCENT`: 最小开发者卖出百分比 (0.00-1.00)，默认值为 0.5
+- `DBOT_DEV_SELL_PERCENT`: 开发者卖出百分比 (0.00-1.00)，默认值为 1.0
 
 **示例：**
 
@@ -127,10 +127,10 @@
 ```
 
 #### 止盈止损配置
-- `DBOT_PNL_ORDER_EXPIRE_DELTA`: 止盈止损订单过期时间（毫秒），例如：43200000
-- `DBOT_PNL_ORDER_EXPIRE_EXECUTE`: 是否执行过期订单 (true/false)
-- `DBOT_PNL_ORDER_USE_MID_PRICE`: 是否使用中间价 (true/false)
-- `DBOT_PNL_CUSTOM_CONFIG_ENABLED`: 是否启用自定义止盈止损配置 (true/false)
+- `DBOT_PNL_ORDER_EXPIRE_DELTA`: 止盈止损订单过期时间（毫秒），默认值为 43200000
+- `DBOT_PNL_ORDER_EXPIRE_EXECUTE`: 是否执行过期订单，默认值为 false
+- `DBOT_PNL_ORDER_USE_MID_PRICE`: 是否使用中间价，默认值为 false
+- `DBOT_PNL_CUSTOM_CONFIG_ENABLED`: 是否启用自定义止盈止损配置，默认值为 true
 
 **示例：**
 

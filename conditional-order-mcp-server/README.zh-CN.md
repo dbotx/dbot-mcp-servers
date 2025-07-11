@@ -61,16 +61,16 @@
 以下环境变量可用于配置默认参数值。这些默认值可以在调用时被覆盖。
 
 #### 基础配置
-- `DBOT_CHAIN`: 默认链类型 (solana)
-- `DBOT_CUSTOM_FEE_AND_TIP`: 是否使用自定义费用 (true/false)
-- `DBOT_PRIORITY_FEE`: 优先费，例如："0.0001"
-- `DBOT_JITO_ENABLED`: 是否启用防夹模式 (true/false)
-- `DBOT_JITO_TIP`: 防夹小费，例如：0.001
-- `DBOT_MAX_SLIPPAGE`: 最大滑点 (0.00-1.00)，例如：0.1
-- `DBOT_CONCURRENT_NODES`: 并发节点数 (1-3)，例如：2
-- `DBOT_RETRIES`: 重试次数 (0-10)，例如：1
-- `DBOT_EXPIRE_DELTA`: 任务有效时长（毫秒），例如：360000000
-- `DBOT_MIN_DEV_SELL_PERCENT`: 跟随Dev卖出触发比例，例如：0.5
+- `DBOT_CHAIN`: 默认链类型，默认值为 "solana"
+- `DBOT_CUSTOM_FEE_AND_TIP`: 是否使用自定义费用，默认值为 false
+- `DBOT_PRIORITY_FEE`: 优先费，默认值为 "0.0001"
+- `DBOT_JITO_ENABLED`: 是否启用防夹模式，默认值为 true
+- `DBOT_JITO_TIP`: 防夹小费，默认值为 0.001
+- `DBOT_MAX_SLIPPAGE`: 最大滑点 (0.00-1.00)，默认值为 0.1
+- `DBOT_CONCURRENT_NODES`: 并发节点数 (1-3)，默认值为 2
+- `DBOT_RETRIES`: 重试次数 (0-10)，默认值为 1
+- `DBOT_EXPIRE_DELTA`: 任务有效时长（毫秒），默认值为 360000000
+- `DBOT_MIN_DEV_SELL_PERCENT`: 跟随Dev卖出触发比例，默认值为 0.5
 
 **配置示例：**
 ```json

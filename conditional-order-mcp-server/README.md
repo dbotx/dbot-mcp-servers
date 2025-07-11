@@ -61,16 +61,16 @@ Add the following to your MCP client configuration:
 The following environment variables can be used to configure default parameter values. These defaults can be overridden at runtime.
 
 #### Basic Configuration
-- `DBOT_CHAIN`: Default chain type (solana).
-- `DBOT_CUSTOM_FEE_AND_TIP`: Whether to use custom fees (true/false).
-- `DBOT_PRIORITY_FEE`: Priority fee, e.g., "0.0001".
-- `DBOT_JITO_ENABLED`: Whether to enable anti-sandwich mode (true/false).
-- `DBOT_JITO_TIP`: Anti-sandwich tip, e.g., 0.001.
-- `DBOT_MAX_SLIPPAGE`: Maximum slippage (0.00-1.00), e.g., 0.1.
-- `DBOT_CONCURRENT_NODES`: Number of concurrent nodes (1-3), e.g., 2.
-- `DBOT_RETRIES`: Number of retries (0-10), e.g., 1.
-- `DBOT_EXPIRE_DELTA`: Task validity duration (milliseconds), e.g., 360000000.
-- `DBOT_MIN_DEV_SELL_PERCENT`: Trigger percentage for following dev's sell, e.g., 0.5.
+- `DBOT_CHAIN`: Default chain type, default value is "solana"
+- `DBOT_CUSTOM_FEE_AND_TIP`: Whether to use custom fees, default value is false
+- `DBOT_PRIORITY_FEE`: Priority fee, default value is "0.0001"
+- `DBOT_JITO_ENABLED`: Whether to enable anti-sandwich mode, default value is true
+- `DBOT_JITO_TIP`: Anti-sandwich tip, default value is 0.001
+- `DBOT_MAX_SLIPPAGE`: Maximum slippage (0.00-1.00), default value is 0.1
+- `DBOT_CONCURRENT_NODES`: Number of concurrent nodes (1-3), default value is 2
+- `DBOT_RETRIES`: Number of retries (0-10), default value is 1
+- `DBOT_EXPIRE_DELTA`: Task validity duration (milliseconds), default value is 360000000
+- `DBOT_MIN_DEV_SELL_PERCENT`: Trigger percentage for following dev's sell, default value is 0.5
 
 **Configuration Example:**
 ```json

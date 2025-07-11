@@ -67,16 +67,16 @@ Here are the environment variables explained:
 - All environment variable defaults can be overridden during the conversation. For example, if the system's default is to enable anti-sandwich mode, you can request to override it by saying, "Buy..., please disable anti-sandwich mode."
 
 #### Basic Configuration
-- `DBOT_CHAIN`: Default chain type (solana/ethereum/base/bsc/tron)
-- `DBOT_CUSTOM_FEE_AND_TIP`: Whether to use custom fees (true/false)
-- `DBOT_PRIORITY_FEE`: Priority fee, e.g., "0.0001"
-- `DBOT_GAS_FEE_DELTA`: Gas fee increment, e.g., 5
-- `DBOT_MAX_FEE_PER_GAS`: Maximum gas fee, e.g., 100
-- `DBOT_JITO_ENABLED`: Whether to enable anti-sandwich mode (true/false)
-- `DBOT_JITO_TIP`: Anti-sandwich tip, e.g., 0.001
-- `DBOT_MAX_SLIPPAGE`: Maximum slippage (0.00-1.00), e.g., 0.1
-- `DBOT_CONCURRENT_NODES`: Number of concurrent nodes (1-3), e.g., 2
-- `DBOT_RETRIES`: Number of retries (0-10), e.g., 1
+- `DBOT_CHAIN`: Default chain type (solana/ethereum/base/bsc/tron), default value is "solana"
+- `DBOT_CUSTOM_FEE_AND_TIP`: Whether to use custom fees, default value is false
+- `DBOT_PRIORITY_FEE`: Priority fee, default value is "0.0001"
+- `DBOT_GAS_FEE_DELTA`: Gas fee increment, default value is 5
+- `DBOT_MAX_FEE_PER_GAS`: Maximum gas fee, default value is 100
+- `DBOT_JITO_ENABLED`: Whether to enable anti-sandwich mode, default value is true
+- `DBOT_JITO_TIP`: Anti-sandwich tip, default value is 0.001
+- `DBOT_MAX_SLIPPAGE`: Maximum slippage (0.00-1.00), default value is 0.1
+- `DBOT_CONCURRENT_NODES`: Number of concurrent nodes (1-3), default value is 2
+- `DBOT_RETRIES`: Number of retries (0-10), default value is 1
 
 **Example:**
 ```json
@@ -99,10 +99,10 @@ Here are the environment variables explained:
 ```
 
 #### Trading Configuration
-- `DBOT_AMOUNT_OR_PERCENT`: Default trade amount or percentage, e.g., 0.001
-- `DBOT_MIGRATE_SELL_PERCENT`: Migration sell percentage (0.00-1.00), e.g., 1.0
-- `DBOT_MIN_DEV_SELL_PERCENT`: Minimum developer sell percentage (0.00-1.00), e.g., 0.5
-- `DBOT_DEV_SELL_PERCENT`: Developer sell percentage (0.00-1.00), e.g., 1.0
+- `DBOT_AMOUNT_OR_PERCENT`: Default trade amount or percentage, default value is 0.001
+- `DBOT_MIGRATE_SELL_PERCENT`: Migration sell percentage (0.00-1.00), default value is 1.0
+- `DBOT_MIN_DEV_SELL_PERCENT`: Minimum developer sell percentage (0.00-1.00), default value is 0.5
+- `DBOT_DEV_SELL_PERCENT`: Developer sell percentage (0.00-1.00), default value is 1.0
 
 **Example:**
 ```json
@@ -119,10 +119,10 @@ Here are the environment variables explained:
 ```
 
 #### Take-Profit/Stop-Loss Configuration
-- `DBOT_PNL_ORDER_EXPIRE_DELTA`: Take-profit/stop-loss order expiration time (in milliseconds), e.g., 43200000
-- `DBOT_PNL_ORDER_EXPIRE_EXECUTE`: Whether to execute expired orders (true/false)
-- `DBOT_PNL_ORDER_USE_MID_PRICE`: Whether to use the mid-price (true/false)
-- `DBOT_PNL_CUSTOM_CONFIG_ENABLED`: Whether to enable custom take-profit/stop-loss configuration (true/false)
+- `DBOT_PNL_ORDER_EXPIRE_DELTA`: Take-profit/stop-loss order expiration time (in milliseconds), default value is 43200000
+- `DBOT_PNL_ORDER_EXPIRE_EXECUTE`: Whether to execute expired orders, default value is false
+- `DBOT_PNL_ORDER_USE_MID_PRICE`: Whether to use the mid-price, default value is false
+- `DBOT_PNL_CUSTOM_CONFIG_ENABLED`: Whether to enable custom take-profit/stop-loss configuration, default value is true
 
 **Example:**
 ```json

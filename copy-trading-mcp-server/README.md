@@ -72,16 +72,16 @@ The following are environment variable descriptions:
 - All environment variable default values can be overridden during conversation. For example, the system defaults to enabling anti-sandwich mode, but you can request to override it during conversation, "Create a copy trading task..., please disable anti-sandwich mode."
 
 #### Basic Configuration
-- `DBOT_CHAIN`: Default chain type (solana/ethereum/base/bsc/tron)
-- `DBOT_CUSTOM_FEE_AND_TIP`: Whether to use custom fees (true/false)
-- `DBOT_PRIORITY_FEE`: Priority fee, e.g., "0.0001"
-- `DBOT_GAS_FEE_DELTA`: Gas fee increment, e.g., 5
-- `DBOT_MAX_FEE_PER_GAS`: Maximum gas fee, e.g., 100
-- `DBOT_JITO_ENABLED`: Whether to enable anti-sandwich mode (true/false)
-- `DBOT_JITO_TIP`: Anti-sandwich tip, e.g., 0.001
-- `DBOT_MAX_SLIPPAGE`: Maximum slippage (0.00-1.00), e.g., 0.1
-- `DBOT_CONCURRENT_NODES`: Number of concurrent nodes (1-3), e.g., 2
-- `DBOT_RETRIES`: Number of retries (0-10), e.g., 1
+- `DBOT_CHAIN`: Default chain type (solana/ethereum/base/bsc/tron), default value is "solana"
+- `DBOT_CUSTOM_FEE_AND_TIP`: Whether to use custom fees, default value is false
+- `DBOT_PRIORITY_FEE`: Priority fee, default value is "0.0001"
+- `DBOT_GAS_FEE_DELTA`: Gas fee increment, default value is 5
+- `DBOT_MAX_FEE_PER_GAS`: Maximum gas fee, default value is 100
+- `DBOT_JITO_ENABLED`: Whether to enable anti-sandwich mode, default value is true
+- `DBOT_JITO_TIP`: Anti-sandwich tip, default value is 0.001
+- `DBOT_MAX_SLIPPAGE`: Maximum slippage (0.00-1.00), default value is 0.1
+- `DBOT_CONCURRENT_NODES`: Number of concurrent nodes (1-3), default value is 2
+- `DBOT_RETRIES`: Number of retries (0-10), default value is 1
 
 **Example:**
 ```json
@@ -104,11 +104,11 @@ The following are environment variable descriptions:
 ```
 
 #### Copy Trading Configuration
-- `DBOT_BUY_AMOUNT_TYPE`: Default buy type (fixed_amount/fixed_ratio/follow_amount)
-- `DBOT_MAX_BUY_AMOUNT`: Default maximum buy amount, e.g., "0.1"
-- `DBOT_BUY_RATIO`: Default follow ratio, e.g., 1.0
-- `DBOT_SELL_MODE`: Default sell mode (mixed/only_copy/only_pnl)
-- `DBOT_SELL_AMOUNT_TYPE`: Default sell type (all/follow_ratio/x_target_ratio)
+- `DBOT_BUY_AMOUNT_TYPE`: Default buy type (fixed_amount/fixed_ratio/follow_amount), default value is "follow_amount"
+- `DBOT_MAX_BUY_AMOUNT`: Default maximum buy amount, default value is null (user must specify)
+- `DBOT_BUY_RATIO`: Default follow ratio, default value is 1.0
+- `DBOT_SELL_MODE`: Default sell mode (mixed/only_copy/only_pnl), default value is "mixed"
+- `DBOT_SELL_AMOUNT_TYPE`: Default sell type (all/follow_ratio/x_target_ratio), default value is "all"
 
 **Example:**
 ```json
@@ -126,9 +126,9 @@ The following are environment variable descriptions:
 ```
 
 #### Take-Profit/Stop-Loss Configuration
-- `DBOT_PNL_ORDER_EXPIRE_DELTA`: Take-profit/stop-loss order expiration time (milliseconds), e.g., 43200000
-- `DBOT_PNL_ORDER_EXPIRE_EXECUTE`: Whether to execute expired orders (true/false)
-- `DBOT_PNL_ORDER_USE_MID_PRICE`: Whether to use mid-price (true/false)
+- `DBOT_PNL_ORDER_EXPIRE_DELTA`: Take-profit/stop-loss order expiration time (milliseconds), default value is 43200000
+- `DBOT_PNL_ORDER_EXPIRE_EXECUTE`: Whether to execute expired orders, default value is false
+- `DBOT_PNL_ORDER_USE_MID_PRICE`: Whether to use mid-price, default value is false
 
 **Example:**
 ```json
