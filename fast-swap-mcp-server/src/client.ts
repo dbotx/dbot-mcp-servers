@@ -9,6 +9,10 @@ import type {
   EditLimitOrderRequest,
   EnableLimitOrderRequest,
   LimitOrderInfo,
+  WalletInfo,
+  WalletQueryParams,
+  TokenSecurityInfo,
+  TokenSecurityQueryParams,
 } from './types.js';
 
 export class DbotClient {
@@ -304,6 +308,47 @@ export class DbotClient {
   async deleteLimitOrder(orderId: string): Promise<ApiResponse<any>> {
     const url = `/automation/limit_order/${orderId}`;
     const response = await this.client.delete(url);
+    return response.data;
+  }
+
+  // --- Wallet Query Methods ---
+
+  /**
+   * Get user's wallets for a specific chain
+   */
+  async getWallets(params: WalletQueryParams = {}): Promise<ApiResponse<WalletInfo[]>> {
+    const url = '/account/wallets';
+    const queryParams = {
+      type: params.type || 'solana',
+      page: params.page || 0,
+      size: params.size || 20,
+    };
+    
+    const response = await this.client.get(url, { params: queryParams });
+    return response.data;
+  }
+
+  // --- Token Security Methods ---
+
+  /**
+   * Get token security information
+   */
+  async getTokenSecurityInfo(params: TokenSecurityQueryParams): Promise<ApiResponse<TokenSecurityInfo>> {
+    const url = 'https://servapi.dbotx.com/dex/poolinfo';
+    const queryParams = {
+      chain: params.chain || 'solana',
+      pair: params.pair,
+    };
+    
+    // Create a new axios instance with auth headers for this specific API
+    const response = await axios.get(url, { 
+      params: queryParams, 
+      timeout: 30000,
+      headers: {
+        'X-API-KEY': this.apiKey,
+        'Content-Type': 'application/json',
+      }
+    });
     return response.data;
   }
 } 

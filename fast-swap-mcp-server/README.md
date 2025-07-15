@@ -14,6 +14,8 @@ Here is a summary of the features:
 - 💼 **Multi-Wallet Support**: Supports trading with multiple wallets simultaneously.
 - 📊 **Order Query**: Query transaction order status and details.
 - 📈 **Take-Profit/Stop-Loss**: Manage take-profit and stop-loss tasks.
+- 💳 **Wallet Management**: Query user wallets by chain type (Solana/EVM).
+- 🔐 **Token Security Check**: Get comprehensive token security information and pool safety details.
 
 ## Quick Start
 
@@ -30,7 +32,8 @@ Add to your MCP client configuration:
       "args": ["-y", "@dbotx/fast-swap-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -52,6 +55,13 @@ Add to your MCP client configuration:
   - "Help me disable the take-profit order."
   - "Help me enable the take-profit order."
   - "Help me delete the take-profit order."
+- **Wallet Management**:
+  - "Show me all my wallets."
+  - "Show me my Solana wallets."
+  - "Show me my EVM wallets."
+- **Token Security Check**:
+  - "Check the security of token {{token_address}} before I buy it."
+  - "Show me the pool information for {{token_address}}."
 
 ## 🌱 Environment Variables
 
@@ -59,7 +69,29 @@ Here are the environment variables explained:
 
 ### Required Environment Variables
 - `DBOT_API_KEY`: DBot API key (required)
-- `DBOT_WALLET_ID`: Default wallet ID (required)
+
+### Wallet Configuration
+At least one of the following wallet IDs must be configured:
+- `DBOT_WALLET_ID_SOLANA`: Solana chain wallet ID (optional)
+- `DBOT_WALLET_ID_EVM`: EVM chain wallet ID (optional, used for Ethereum, Base, BSC)
+- `DBOT_WALLET_ID_TRON`: Tron chain wallet ID (optional)
+- `DBOT_WALLET_ID_BASE`: Base chain wallet ID (optional, takes priority over EVM)
+- `DBOT_WALLET_ID_ARBITRUM`: Arbitrum chain wallet ID (optional, takes priority over EVM)
+- `DBOT_WALLET_ID_BSC`: BSC chain wallet ID (optional, takes priority over EVM)
+
+**Priority:** Specific chain wallet ID > Generic chain type wallet ID
+
+**Example:**
+```json
+{
+  "env": {
+    "DBOT_API_KEY": "your-api-key",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
+    "DBOT_WALLET_ID_BASE": "your-base-wallet-id"
+  }
+}
+```
 
 ### Optional Default Parameter Configuration
 - You can change the configuration according to the examples. If not changed, the default configuration will be used.
@@ -83,7 +115,8 @@ Here are the environment variables explained:
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_CHAIN": "solana",
     "DBOT_CUSTOM_FEE_AND_TIP": "true",
     "DBOT_PRIORITY_FEE": "0.0002",
@@ -109,7 +142,8 @@ Here are the environment variables explained:
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_AMOUNT_OR_PERCENT": "0.001",
     "DBOT_MIGRATE_SELL_PERCENT": "1.0",
     "DBOT_MIN_DEV_SELL_PERCENT": "0.5",
@@ -129,7 +163,8 @@ Here are the environment variables explained:
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_PNL_ORDER_EXPIRE_DELTA": "43200000",
     "DBOT_PNL_ORDER_EXPIRE_EXECUTE": "true",
     "DBOT_PNL_ORDER_USE_MID_PRICE": "false",
@@ -282,6 +317,29 @@ Delete a take-profit/stop-loss order created by a fast swap.
 **Parameters:**
 - `id` (string): Order ID **[required]**
 
+### get_user_wallets
+
+Query user's wallets for a specific chain type. If no type is specified, it will query all types (solana and evm).
+
+**Parameters:**
+- `type` (string, optional): Chain type to query (solana/evm). If not specified, queries all types.
+- `page` (number, optional): Page number, defaults to 0.
+- `size` (number, optional): Number of results per page, defaults to 20.
+
+### get_token_security_info
+
+Get token security information and pool safety details. **Important: This tool should be called before making any trading transactions to check token security factors.**
+
+**Parameters:**
+- `chain` (string, optional): Chain name, defaults to 'solana'.
+- `pair` (string, required): Token address or trading pair address.
+
+**Returns comprehensive token information including:**
+- Token and pool creation time
+- Price and market cap
+- Security factors (mint/freeze authority, top holder concentration)
+- Pool liquidity information
+- Relevant links (Birdeye, Jupiter, etc.)
 
 ## 📚 API Documentation
 

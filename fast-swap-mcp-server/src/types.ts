@@ -286,3 +286,153 @@ export interface LimitOrderInfo {
   tokenInfo: Record<string, any>;
   links: Record<string, any>;
 } 
+
+// --- Wallet Query Types ---
+
+export interface WalletInfo {
+  id: string;
+  name: string;
+  type: 'solana' | 'evm';
+  address: string;
+}
+
+export interface WalletQueryParams {
+  type?: 'solana' | 'evm';
+  page?: number;
+  size?: number;
+}
+
+// --- Token Security Types ---
+
+export interface TokenSecurityInfo {
+  type: string;
+  pair: string;
+  tokenReserve: string;
+  currencyReserve: string;
+  tokenPriceUsd: number;
+  currencyPriceUsd: number;
+  exchange: string;
+  tokenInfo: {
+    contract: string;
+    name: string;
+    symbol: string;
+    decimals: number;
+    icon: string;
+    priceUsd: number;
+  };
+  currencyInfo: {
+    contract: string;
+    name: string;
+    symbol: string;
+    decimals: number;
+    icon: string;
+    priceUsd: number;
+  };
+  poolSafetyInfo: {
+    type: string;
+    canMint: boolean;
+    canFrozen: boolean;
+    totalSupply: string;
+    totalSupplyUI: string;
+    transferFeePercent: number | null;
+    isDelegated: boolean | null;
+    tokenReserve: string;
+    tokenReserveUI: string;
+    currencyReserve: string;
+    currencyReserveUI: string;
+    lpReserve: string | null;
+    lpReserveUI: string | null;
+    burnedOrLockedLp: string | null;
+    burnedOrLockedLpUI: string | null;
+    burnedOrLockedLpPercent: number | null;
+    top10Percent: number;
+  };
+  liquidityUsd: number;
+  tokenMcUsd: number;
+  tokenCreateAt: number;
+  poolCreator: string;
+  poolCreatorName: string | null;
+  progress: number | null;
+  priceImpact: number | null;
+  devHoldPercent: number | null;
+  poolCreateAt: number;
+  links: {
+    website: string | null;
+    twitter: string | null;
+    telegram: string | null;
+  };
+}
+
+export interface TokenSecurityQueryParams {
+  chain?: string;
+  pair: string;
+}
+
+// --- Wallet ID Helper Function ---
+
+export interface WalletIdConfig {
+  DBOT_WALLET_ID_SOLANA?: string;
+  DBOT_WALLET_ID_EVM?: string;
+  DBOT_WALLET_ID_TRON?: string;
+  DBOT_WALLET_ID_BASE?: string;
+  DBOT_WALLET_ID_ARBITRUM?: string;
+  DBOT_WALLET_ID_BSC?: string;
+}
+
+/**
+ * Get wallet ID based on chain
+ */
+export function getWalletIdByChain(chain: Chain): string {
+  const chainUpperCase = chain.toUpperCase();
+  
+  // Check specific chain first
+  const specificWalletId = process.env[`DBOT_WALLET_ID_${chainUpperCase}`];
+  if (specificWalletId) {
+    return specificWalletId;
+  }
+  
+  // Fall back to generic chain type
+  let fallbackKey = '';
+  switch (chain) {
+    case 'solana':
+      fallbackKey = 'DBOT_WALLET_ID_SOLANA';
+      break;
+    case 'ethereum':
+    case 'base':
+    case 'bsc':
+      fallbackKey = 'DBOT_WALLET_ID_EVM';
+      break;
+    case 'tron':
+      fallbackKey = 'DBOT_WALLET_ID_TRON';
+      break;
+    default:
+      fallbackKey = 'DBOT_WALLET_ID_EVM';
+  }
+  
+  const fallbackWalletId = process.env[fallbackKey];
+  if (fallbackWalletId) {
+    return fallbackWalletId;
+  }
+  
+  throw new Error(`No wallet ID configured for chain ${chain}. Please configure at least one of the following environment variables: DBOT_WALLET_ID_SOLANA, DBOT_WALLET_ID_EVM, DBOT_WALLET_ID_TRON, DBOT_WALLET_ID_BASE, DBOT_WALLET_ID_ARBITRUM, DBOT_WALLET_ID_BSC`);
+}
+
+/**
+ * Check if at least one wallet ID is configured
+ */
+export function validateWalletIdConfig(): void {
+  const requiredEnvVars = [
+    'DBOT_WALLET_ID_SOLANA',
+    'DBOT_WALLET_ID_EVM', 
+    'DBOT_WALLET_ID_TRON',
+    'DBOT_WALLET_ID_BASE',
+    'DBOT_WALLET_ID_ARBITRUM',
+    'DBOT_WALLET_ID_BSC'
+  ];
+  
+  const hasAtLeastOne = requiredEnvVars.some(envVar => process.env[envVar]);
+  
+  if (!hasAtLeastOne) {
+    throw new Error(`At least one wallet ID must be configured. Please set one of the following environment variables: ${requiredEnvVars.join(', ')}`);
+  }
+} 

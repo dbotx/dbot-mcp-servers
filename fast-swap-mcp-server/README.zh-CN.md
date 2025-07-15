@@ -16,6 +16,8 @@
 - 💼 **多钱包支持**: 支持使用多个钱包同时进行交易
 - 📊 **订单查询**: 查询交易订单状态和详情
 - 📈 **止盈止损**: 管理止盈止损任务
+- 💳 **钱包管理**: 按链类型查询用户钱包（Solana/EVM）
+- 🔐 **代币安全检查**: 获取全面的代币安全信息和池子安全详情
 
 
 ## 快速开始
@@ -34,7 +36,8 @@
       "args": ["-y", "@dbotx/fast-swap-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -57,6 +60,13 @@
   - "帮我关闭止盈单"
   - "帮我打开止盈单"
   - "帮我删除止盈单"
+- **钱包管理**：
+  - "显示我的所有钱包"
+  - "显示我的 Solana 钱包"
+  - "显示我的 EVM 钱包"
+- **代币安全检查**：
+  - "买入前先检查代币 {{代币地址}} 的安全性"
+  - "显示 {{代币地址}} 的池子信息"
 
 
 ## 🌱 环境变量
@@ -65,7 +75,29 @@
 
 ### 必需的环境变量
 - `DBOT_API_KEY`: DBot API密钥（必需）
-- `DBOT_WALLET_ID`: 默认钱包ID（必需）
+
+### 钱包配置
+至少需要配置以下钱包ID中的一个：
+- `DBOT_WALLET_ID_SOLANA`: Solana 链钱包ID（可选）
+- `DBOT_WALLET_ID_EVM`: EVM 链钱包ID（可选，用于 Ethereum, Base, BSC）
+- `DBOT_WALLET_ID_TRON`: Tron 链钱包ID（可选）
+- `DBOT_WALLET_ID_BASE`: Base 链钱包ID（可选，优先于 EVM）
+- `DBOT_WALLET_ID_ARBITRUM`: Arbitrum 链钱包ID（可选，优先于 EVM）
+- `DBOT_WALLET_ID_BSC`: BSC 链钱包ID（可选，优先于 EVM）
+
+**优先级：** 特定链钱包ID > 通用链类型钱包ID
+
+**示例：**
+```json
+{
+  "env": {
+    "DBOT_API_KEY": "your-api-key",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
+    "DBOT_WALLET_ID_BASE": "your-base-wallet-id"
+  }
+}
+```
 
 ### 可选的默认参数配置
 - 如需更改可根据示例配置，如未更改将使用默认配置。
@@ -90,7 +122,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_CHAIN": "solana",
     "DBOT_CUSTOM_FEE_AND_TIP": "true",
     "DBOT_PRIORITY_FEE": "0.0002",
@@ -117,7 +150,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_AMOUNT_OR_PERCENT": "0.001",
     "DBOT_MIGRATE_SELL_PERCENT": "1.0",
     "DBOT_MIN_DEV_SELL_PERCENT": "0.5",
@@ -138,7 +172,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_PNL_ORDER_EXPIRE_DELTA": "43200000",
     "DBOT_PNL_ORDER_EXPIRE_EXECUTE": "true",
     "DBOT_PNL_ORDER_USE_MID_PRICE": "false",
@@ -292,6 +327,29 @@
 **参数:**
 - `id` (string): 订单ID **[必需]**
 
+### get_user_wallets
+
+查询用户指定链类型的钱包。如果未指定类型，会查询所有类型（solana 和 evm）。
+
+**参数:**
+- `type` (string, 可选): 查询的链类型 (solana/evm)。如果未指定，查询所有类型。
+- `page` (number, 可选): 页码，默认为 0。
+- `size` (number, 可选): 每页结果数，默认为 20。
+
+### get_token_security_info
+
+获取代币安全信息和池子安全详情。**重要提示：在进行任何交易前应该调用此工具检查代币安全因素。**
+
+**参数:**
+- `chain` (string, 可选): 链名称，默认为 'solana'。
+- `pair` (string, 必需): 代币地址或交易对地址。
+
+**返回全面的代币信息，包括：**
+- 代币和池子创建时间
+- 价格和市值
+- 安全因素（mint/freeze权限、前10持有者集中度）
+- 池子流动性信息
+- 相关链接（Birdeye、Jupiter等）
 
 ## 📚 API文档
 
