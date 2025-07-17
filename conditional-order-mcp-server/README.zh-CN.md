@@ -137,7 +137,7 @@
 **参数:**
 - `pair` (string): Pump代币地址 **[必需]**
 - `amountOrPercent` (number): 卖出比例（0-1），例如 0.5 表示卖出50% **[必需]**
-- `walletId` (string): 钱包ID（可选，如未提供将使用环境变量 DBOT_WALLET_ID）
+- `walletId` (string): 钱包ID（可选，如未提供将使用相应链的钱包ID）
 - `chain` (string): 区块链名称 (solana，默认：solana)
 - `pairType` (string): 代币类型 (pump/raydium_amm，默认：pump)
 - `customFeeAndTip` (boolean): 是否自定义费用和小费设置（默认：false）
@@ -170,7 +170,7 @@
 - `pair` (string): Pump代币地址或交易对地址 **[必需]**
 - `amountOrPercent` (number): 卖出比例（0-1），例如 0.5 表示卖出50% **[必需]**
 - `minDevSellPercent` (number): 触发比例（0-1），当Dev卖出超过这个比例时卖出你的代币（默认：0.5）
-- `walletId` (string): 钱包ID（可选，如未提供将使用环境变量 DBOT_WALLET_ID）
+- `walletId` (string): 钱包ID（可选，如未提供将使用相应链的钱包ID）
 - 其他参数与 `create_migrate_order` 相同
 
 **示例:**
@@ -362,7 +362,7 @@
 
 ## 注意事项
 
-1. **钱包配置**: `walletId` 参数是可选的，如果不提供将自动使用环境变量 `DBOT_WALLET_ID` 中的钱包ID
+1. **钱包配置**: `walletId` 参数是可选的，如果不提供将自动使用相应链的钱包ID
 2. **代币类型**: 
    - `pump`: 表示代币还未上Raydium
    - `raydium_amm`: 表示代币已上Raydium

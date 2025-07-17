@@ -35,7 +35,8 @@ Add to MCP client configuration:
       "args": ["-y", "@dbotx/copy-trading-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -106,7 +107,8 @@ Configure chain-specific wallet IDs. The system will automatically select the ap
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_CHAIN": "solana",
     "DBOT_CUSTOM_FEE_AND_TIP": "true",
     "DBOT_PRIORITY_FEE": "0.0002",
@@ -133,7 +135,8 @@ Configure chain-specific wallet IDs. The system will automatically select the ap
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_BUY_AMOUNT_TYPE": "follow_amount",
     "DBOT_MAX_BUY_AMOUNT": "0.1",
     "DBOT_BUY_RATIO": "1.0",
@@ -153,7 +156,8 @@ Configure chain-specific wallet IDs. The system will automatically select the ap
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_PNL_ORDER_EXPIRE_DELTA": "43200000",
     "DBOT_PNL_ORDER_EXPIRE_EXECUTE": "true",
     "DBOT_PNL_ORDER_USE_MID_PRICE": "false"
@@ -182,7 +186,7 @@ Create multi-chain copy trading tasks - automatically follow specified wallet ad
 - `dexFilter` (array, optional): DEXs to follow, null means all, specifying names means only follow those DEXs' trades
 - `targetIds` (array, required): Wallet addresses to copy trade (up to 10)
 - `tokenBlacklist` (array, optional): Blacklisted token addresses for the current task (up to 20), buying and selling of these tokens will be skipped
-- `walletId` (string, optional): ID of the wallet to use, obtainable via "Wallet Info API" (if not provided, `DBOT_WALLET_ID` environment variable will be used)
+- `walletId` (string, optional): ID of the wallet to use, obtainable via "Wallet Info API" (if not provided, the appropriate chain-specific environment variable will be used)
 - `groupId` (string, optional): Group ID
 - `buySettings` (object, required): Buy-related settings
 - `sellSettings` (object, required): Sell-related settings
@@ -388,7 +392,7 @@ Query user wallets by chain type
 
 ## Important Notes
 
-1. **Wallet Configuration**: The `walletId` parameter is optional; if not provided, the wallet ID from the `DBOT_WALLET_ID` environment variable will be used automatically
+1. **Wallet Configuration**: The `walletId` parameter is optional; if not provided, the appropriate chain-specific wallet ID will be used automatically
 2. **Copied Address**: Ensure the provided wallet address belongs to a trader you trust
 3. **Fund Management**: Ensure your account has sufficient funds for copy trading
 4. **Monitoring Frequency**: The system will monitor the copied address's trading activities in real-time

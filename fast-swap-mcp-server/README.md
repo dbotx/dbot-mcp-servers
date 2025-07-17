@@ -190,7 +190,7 @@ Create a fast swap order, supporting multi-chain trading (solana/ethereum/base/b
 **Parameters:**
 - `chain` (string, optional): The chain (solana/ethereum/base/bsc/tron), defaults to solana if not specified.
 - `pair` (string, required): The token or trading pair address to buy/sell.
-- `walletId` (string, optional): The ID of the wallet to use, obtainable via the "Wallet Info API" (will use `DBOT_WALLET_ID` if not provided).
+- `walletId` (string, optional): The ID of the wallet to use, obtainable via the "Wallet Info API" (will use the appropriate chain-specific wallet ID if not provided).
 - `type` (string, required): The transaction type, either 'buy' or 'sell'.
 - `amountOrPercent` (number, optional): When buying, the buy amount (in ETH/SOL/BNB/TRX); when selling, the sell percentage (0.00-1.00), defaults to 0.001.
 - `customFeeAndTip` (boolean, optional): "true" means both priority fee and bribe are effective; "false" means only priority fee is effective in high-speed mode, and only bribe is effective in anti-sandwich mode. Defaults to false.

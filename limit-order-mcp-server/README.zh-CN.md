@@ -30,7 +30,8 @@
       "args": ["-y", "@dbotx/limit-order-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -102,7 +103,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_CHAIN": "solana",
     "DBOT_CUSTOM_FEE_AND_TIP": "true",
     "DBOT_PRIORITY_FEE": "0.0002",
@@ -128,7 +130,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_EXPIRE_DELTA": "432000000",
     "DBOT_EXPIRE_EXECUTE": "false",
     "DBOT_USE_MID_PRICE": "true"
@@ -247,7 +250,7 @@
 
 ## ⚠️ 注意事项
 
-1. `walletId` 可选，未提供时自动使用 `DBOT_WALLET_ID`
+1. `walletId` 可选，未提供时自动使用相应链的钱包ID
 2. 价格以美元计价，建议使用合理精度
 3. 默认任务有效期为 432000000 毫秒（5 天）
 4. 触发方向：`up` 为上涨触发，`down` 为下跌触发

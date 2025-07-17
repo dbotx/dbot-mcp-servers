@@ -31,7 +31,8 @@ Add the following to your MCP client configuration:
       "args": ["-y", "@dbotx/limit-order-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -103,7 +104,8 @@ Configure chain-specific wallet IDs. The system will automatically select the ap
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_CHAIN": "solana",
     "DBOT_CUSTOM_FEE_AND_TIP": "true",
     "DBOT_PRIORITY_FEE": "0.0002",
@@ -129,7 +131,8 @@ Configure chain-specific wallet IDs. The system will automatically select the ap
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_EXPIRE_DELTA": "432000000",
     "DBOT_EXPIRE_EXECUTE": "false",
     "DBOT_USE_MID_PRICE": "true"
@@ -248,7 +251,7 @@ Get comprehensive token security information and market data for Solana tokens.
 
 ## ⚠️ Notes
 
-1.  `walletId` is optional; `DBOT_WALLET_ID` is used if not provided.
+1.  `walletId` is optional; the appropriate chain-specific wallet ID is used if not provided.
 2.  Prices are in USD; use reasonable precision.
 3.  The default task validity is 432,000,000 milliseconds (5 days).
 4.  Trigger direction: `up` triggers on price increase, `down` triggers on price decrease.

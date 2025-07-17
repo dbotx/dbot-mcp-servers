@@ -137,7 +137,7 @@ Automatically executes a sell order when a token migrates from Pump.fun to Raydi
 **Parameters:**
 - `pair` (string): Pump token address **[Required]**.
 - `amountOrPercent` (number): Sell percentage (0-1), e.g., 0.5 for 50% **[Required]**.
-- `walletId` (string): Wallet ID (optional, uses `DBOT_WALLET_ID` from environment variables if not provided).
+- `walletId` (string): Wallet ID (optional, uses the appropriate chain-specific wallet ID if not provided).
 - `chain` (string): Blockchain name (solana, default: solana).
 - `pairType` (string): Token type (pump, default: pump).
 - `customFeeAndTip` (boolean): Whether to use custom fee and tip settings (default: false).
@@ -170,7 +170,7 @@ Automatically follows and sells when a developer sells a specified percentage of
 - `pair` (string): Pump token address or pair address **[Required]**.
 - `amountOrPercent` (number): Sell percentage (0-1), e.g., 0.5 for 50% **[Required]**.
 - `minDevSellPercent` (number): Trigger percentage (0-1), sells your tokens when the dev sells more than this percentage (default: 0.5).
-- `walletId` (string): Wallet ID (optional, uses `DBOT_WALLET_ID` from environment variables if not provided).
+- `walletId` (string): Wallet ID (optional, uses the appropriate chain-specific wallet ID if not provided).
 - Other parameters are the same as `create_migrate_order`.
 
 **Example:**
@@ -191,7 +191,7 @@ Edit a sell-on-open task.
 - `id` (string): ID of the sell-on-open task **[Required]**.
 - `pair` (string): Pump token address **[Required]**.
 - `amountOrPercent` (number): Sell percentage (0-1) **[Required]**.
-- `walletId` (string): Wallet ID (optional, uses `DBOT_WALLET_ID` from environment variables if not provided).
+- `walletId` (string): Wallet ID (optional, uses the appropriate chain-specific wallet ID if not provided).
 - Other parameters are the same as `create_migrate_order`.
 
 ### update_dev_order
@@ -202,7 +202,7 @@ Edit a follow-dev-sell task.
 - `id` (string): ID of the follow-dev-sell task **[Required]**.
 - `pair` (string): Pump token address or pair address **[Required]**.
 - `amountOrPercent` (number): Sell percentage (0-1) **[Required]**.
-- `walletId` (string): Wallet ID (optional, uses `DBOT_WALLET_ID` from environment variables if not provided).
+- `walletId` (string): Wallet ID (optional, uses the appropriate chain-specific wallet ID if not provided).
 - Other parameters are the same as `create_dev_order`.
 
 ### toggle_migrate_order

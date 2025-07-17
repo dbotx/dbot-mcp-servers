@@ -35,7 +35,8 @@
       "args": ["-y", "@dbotx/copy-trading-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -106,7 +107,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_CHAIN": "solana",
     "DBOT_CUSTOM_FEE_AND_TIP": "true",
     "DBOT_PRIORITY_FEE": "0.0002",
@@ -133,7 +135,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_BUY_AMOUNT_TYPE": "follow_amount",
     "DBOT_MAX_BUY_AMOUNT": "0.1",
     "DBOT_BUY_RATIO": "1.0",
@@ -153,7 +156,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_PNL_ORDER_EXPIRE_DELTA": "43200000",
     "DBOT_PNL_ORDER_EXPIRE_EXECUTE": "true",
     "DBOT_PNL_ORDER_USE_MID_PRICE": "false"
@@ -182,7 +186,7 @@
 - `dexFilter` (array, 可选): 需要跟随的DEX，null表示全部跟随，填写名字表示只跟随该DEX的交易
 - `targetIds` (array, 必需): 需要跟单的钱包地址（最多10个）
 - `tokenBlacklist` (array, 可选): 当前任务的黑名单代币地址（最多20个），加入黑名单之后将不会跟买和跟卖这些代币
-- `walletId` (string, 可选): 使用的钱包的id，可通过"钱包信息 API"获取（如未提供将使用环境变量 DBOT_WALLET_ID）
+- `walletId` (string, 可选): 使用的钱包的id，可通过"钱包信息 API"获取（如未提供将使用相应链的环境变量）
 - `groupId` (string, 可选): 分组id
 - `buySettings` (object, 必需): 买入相关设置
 - `sellSettings` (object, 必需): 卖出相关设置
@@ -388,7 +392,7 @@
 
 ## 注意事项
 
-1. **钱包配置**: `walletId` 参数是可选的，如果不提供将自动使用环境变量 `DBOT_WALLET_ID` 中的钱包ID
+1. **钱包配置**: `walletId` 参数是可选的，如果不提供将自动使用相应链的钱包ID
 2. **被跟单地址**: 确保提供的钱包地址是您信任的交易者
 3. **资金管理**: 确保账户有足够的资金执行跟单交易
 4. **监控频率**: 系统会实时监控被跟单地址的交易活动
