@@ -14,6 +14,9 @@ import {
   EditCopyTradingRequestSchema,
   SwitchCopyTradingRequestSchema,
   DeleteCopyTradingRequestSchema,
+  WalletQueryParams,
+  getWalletIdByChain,
+  validateWalletIdConfig,
 } from './types.js';
 
 class CopyTradingMcpServer {
@@ -33,10 +36,21 @@ class CopyTradingMcpServer {
       }
     );
 
+    // Validate wallet ID configuration
+    try {
+      validateWalletIdConfig();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('Wallet ID configuration error:', errorMessage);
+      throw error;
+    }
+
     this.client = new DbotCopyTradingClient();
     this.setupToolHandlers();
     this.setupErrorHandling();
   }
+
+
 
   private setupErrorHandling(): void {
     this.server.onerror = (error: any) => {
@@ -47,6 +61,77 @@ class CopyTradingMcpServer {
       await this.server.close();
       process.exit(0);
     });
+  }
+
+  /**
+   * Format API error message
+   */
+  private formatApiError(response: any, operation: string, request?: any): string {
+    let errorText = `❌ ${operation} failed:\n\n`;
+    
+    // Show error status
+    errorText += `🔍 Error Status: ${response.err ? 'Failed' : 'Unknown Error'}\n`;
+    
+    // Show response content
+    if (response.res) {
+      errorText += `📄 API Response: ${JSON.stringify(response.res, null, 2)}\n`;
+    }
+    
+    // Show request parameters (exclude sensitive info)
+    if (request) {
+      const safeRequest = { ...request };
+      if (safeRequest.walletId) {
+        safeRequest.walletId = safeRequest.walletId.substring(0, 8) + '***';
+      }
+      errorText += `📋 Request Parameters: ${JSON.stringify(safeRequest, null, 2)}\n`;
+    }
+    
+    // Show documentation link
+    errorText += `\n📚 Documentation: ${response.docs || 'https://dbotx.com/docs'}`;
+    
+    return errorText;
+  }
+
+  /**
+   * Format network error message
+   */
+  private formatNetworkError(error: any, operation: string, request?: any): string {
+    let errorText = `❌ ${operation} failed:\n\n`;
+    
+    if (error.response) {
+      // HTTP error response
+      errorText += `🌐 HTTP Status: ${error.response.status} ${error.response.statusText}\n`;
+      errorText += `📄 Error Response: ${JSON.stringify(error.response.data, null, 2)}\n`;
+    } else if (error.request) {
+      // Network request failed
+      errorText += `🔌 Network Error: No response received, please check network connection\n`;
+      errorText += `📡 Request Details: ${error.message}\n`;
+    } else {
+      // Other errors
+      errorText += `⚠️ Unknown Error: ${error.message}\n`;
+    }
+    
+    // Show request parameters (exclude sensitive info)
+    if (request) {
+      const safeRequest = { ...request };
+      if (safeRequest.walletId) {
+        safeRequest.walletId = safeRequest.walletId.substring(0, 8) + '***';
+      }
+      if (safeRequest.walletIdList) {
+        safeRequest.walletIdList = safeRequest.walletIdList.map((id: string) => 
+          id.substring(0, 8) + '***'
+        );
+      }
+      errorText += `📋 Request Parameters: ${JSON.stringify(safeRequest, null, 2)}\n`;
+    }
+    
+    errorText += `\n💡 Suggestions:\n`;
+    errorText += `- Check if API key is correct\n`;
+    errorText += `- Check if network connection is normal\n`;
+    errorText += `- Check if parameter format is correct\n`;
+    errorText += `- Check if wallet ID is valid\n`;
+    
+    return errorText;
   }
 
   private setupToolHandlers(): void {
@@ -527,6 +612,30 @@ Request example:
               },
             },
           },
+          {
+            name: 'get_user_wallets',
+            description: 'Query user\'s wallets for a specific chain type. If no type is specified, it will query all types (solana and evm). The tool returns formatted data in English, but you should present the results to the user in their preferred language. Please print details.',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                type: {
+                  type: 'string',
+                  enum: ['solana', 'evm'],
+                  description: 'Chain type to query (solana/evm). If not specified, queries all types.',
+                },
+                page: {
+                  type: 'number',
+                  description: 'Page number',
+                  default: 0,
+                },
+                size: {
+                  type: 'number',
+                  description: 'Number of results per page',
+                  default: 20,
+                },
+              },
+            },
+          },
         ],
       };
     });
@@ -546,6 +655,8 @@ Request example:
             return await this.handleDeleteCopyTrading(args);
           case 'get_copy_trading_tasks':
             return await this.handleGetCopyTradingTasks(args);
+          case 'get_user_wallets':
+            return await this.handleGetUserWallets(args);
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
         }
@@ -567,12 +678,10 @@ Request example:
 
   private async handleCreateCopyTrading(args: any) {
     try {
-      // If walletId is not provided, use the environment variable
+      // Use chain-specific environment variable if walletId not provided
       if (!args.walletId) {
-        args.walletId = process.env.DBOT_WALLET_ID;
-        if (!args.walletId) {
-          throw new Error('Wallet ID not provided: Please specify walletId in the parameters or set the DBOT_WALLET_ID environment variable');
-        }
+        const chain = args.chain || 'solana';
+        args.walletId = getWalletIdByChain(chain);
       }
 
       // Validate the request parameters
@@ -620,12 +729,10 @@ ${args.groupId ? `- Group ID: ${args.groupId}` : ''}
 
   private async handleEditCopyTrading(args: any) {
     try {
-      // If walletId is not provided, use the environment variable
+      // Use chain-specific environment variable if walletId not provided
       if (!args.walletId) {
-        args.walletId = process.env.DBOT_WALLET_ID;
-        if (!args.walletId) {
-          throw new Error('Wallet ID not provided: Please specify walletId in the parameters or set the DBOT_WALLET_ID environment variable');
-        }
+        const chain = args.chain || 'solana';
+        args.walletId = getWalletIdByChain(chain);
       }
 
       const validatedRequest = EditCopyTradingRequestSchema.parse(args);
@@ -729,6 +836,133 @@ ${args.deletePnlOrder ? '- Also deleted all associated take-profit/stop-loss ord
         ErrorCode.InvalidRequest,
         `Failed to get copy trading task list: ${error instanceof Error ? error.message : String(error)}`
       );
+    }
+  }
+
+  private async handleGetUserWallets(args: any) {
+    try {
+      const page = args.page || 0;
+      const size = args.size || 20;
+      
+      // If no type specified or empty string, query all types
+      if (!args.type || args.type === '') {
+        const [solanaResponse, evmResponse] = await Promise.all([
+          this.client.getWallets({ type: 'solana', page, size }),
+          this.client.getWallets({ type: 'evm', page, size }),
+        ]);
+        
+        // Check for errors in either response
+        if (solanaResponse.err && evmResponse.err) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: this.formatApiError(solanaResponse, 'Query user wallets', { type: 'all', page, size }),
+              },
+            ],
+          };
+        }
+        
+        // Combine results
+        const solanaWallets = solanaResponse.err ? [] : (solanaResponse.res || []);
+        const evmWallets = evmResponse.err ? [] : (evmResponse.res || []);
+        const allWallets = [...solanaWallets, ...evmWallets];
+        
+        let result = `💳 User Wallets Query Results (${allWallets.length} wallets total):\n\n`;
+        
+        if (allWallets.length === 0) {
+          result += 'No wallets found\n';
+        } else {
+          // Group by type for better organization
+          const solanaCount = solanaWallets.length;
+          const evmCount = evmWallets.length;
+          
+          if (solanaCount > 0) {
+            result += `🔶 Solana Wallets (${solanaCount}):\n`;
+            solanaWallets.forEach((wallet, index) => {
+              result += `${index + 1}. Wallet ID: ${wallet.id}\n`;
+              result += `   Name: ${wallet.name}\n`;
+              result += `   Type: ${wallet.type}\n`;
+              result += `   Address: ${wallet.address}\n\n`;
+            });
+          }
+          
+          if (evmCount > 0) {
+            result += `🔷 EVM Wallets (${evmCount}):\n`;
+            evmWallets.forEach((wallet, index) => {
+              result += `${index + 1}. Wallet ID: ${wallet.id}\n`;
+              result += `   Name: ${wallet.name}\n`;
+              result += `   Type: ${wallet.type}\n`;
+              result += `   Address: ${wallet.address}\n\n`;
+            });
+          }
+        }
+        
+        result += `\n📚 Documentation: ${solanaResponse.docs || evmResponse.docs}`;
+        
+        return {
+          content: [
+            {
+              type: 'text',
+              text: result,
+            },
+          ],
+        };
+      }
+      
+      // If type is specified, query only that type
+      const params: WalletQueryParams = {
+        type: args.type,
+        page,
+        size,
+      };
+      
+      const response = await this.client.getWallets(params);
+      
+      if (response.err) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: this.formatApiError(response, 'Query user wallets', params),
+            },
+          ],
+        };
+      }
+
+      const wallets = response.res || [];
+      let result = `💳 User Wallets Query Results (${wallets.length} ${args.type} wallets):\n\n`;
+      
+      if (wallets.length === 0) {
+        result += 'No wallets found\n';
+      } else {
+        wallets.forEach((wallet, index) => {
+          result += `${index + 1}. Wallet ID: ${wallet.id}\n`;
+          result += `   Name: ${wallet.name}\n`;
+          result += `   Type: ${wallet.type}\n`;
+          result += `   Address: ${wallet.address}\n\n`;
+        });
+      }
+
+      result += `\n📚 Documentation: ${response.docs}`;
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: result,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: this.formatNetworkError(error, 'Query user wallets', args),
+          },
+        ],
+      };
     }
   }
 

@@ -14,6 +14,7 @@ Here's an overview of the features:
 - ⚡ **Multi-chain Support**: Supports multi-chain copy trading (Solana, Ethereum, Base, BSC, Tron)
 - 💰 **Flexible Buying**: Supports fixed amount, fixed ratio, and follow amount buying modes
 - 📊 **Smart Selling**: Supports follow selling, take-profit/stop-loss, mixed mode, and other selling strategies
+- 💳 **Wallet Management**: Query user wallets across different chains with balance information
 - 🛡️ **Risk Control**: Comprehensive token filtering, tax rate checks, position limits, and other risk control mechanisms
 - 🔧 **Task Management**: Create, edit, enable/disable, and delete copy trading tasks
 - 📈 **Real-time Monitoring**: Supports multi-DEX following and blacklist management
@@ -64,7 +65,24 @@ The following are environment variable descriptions:
 
 ### Required Environment Variables
 - `DBOT_API_KEY`: DBot API key (required)
-- `DBOT_WALLET_ID`: Default wallet ID (required)
+
+### Wallet Configuration (At least one required)
+Configure chain-specific wallet IDs. The system will automatically select the appropriate wallet based on the trading chain:
+
+#### Chain-specific Wallet IDs (Priority)
+- `DBOT_WALLET_ID_SOLANA`: Solana wallet ID
+- `DBOT_WALLET_ID_BASE`: Base network wallet ID  
+- `DBOT_WALLET_ID_ARBITRUM`: Arbitrum network wallet ID
+- `DBOT_WALLET_ID_BSC`: BSC network wallet ID
+
+#### Generic Wallet IDs (Fallback)
+- `DBOT_WALLET_ID_EVM`: Generic EVM wallet ID (for Ethereum/Base/Arbitrum/BSC)
+- `DBOT_WALLET_ID_TRON`: Tron wallet ID
+
+**Wallet Selection Priority:**
+1. Specific chain wallet ID (e.g., `DBOT_WALLET_ID_BASE` for Base)
+2. Generic chain type wallet ID (e.g., `DBOT_WALLET_ID_EVM` for EVM chains)
+3. At least one wallet ID must be configured, or the system will throw an error
 
 ### Optional Default Parameter Configuration
 - If you need to change, you can configure according to the example; if not changed, the default configuration will be used.
@@ -300,6 +318,30 @@ Get copy trading task list
   "size": 20
 }
 ```
+
+### query_wallets
+
+Query user wallets by chain type
+
+**Parameters:**
+- `type` (string): Wallet type - "solana" for Solana wallets, "evm" for EVM wallets, "all" for both types
+- `page` (number): Page number, starting from 0
+- `size` (number): Number of items per page (1-20)
+
+**Example:**
+```json
+{
+  "type": "all",
+  "page": 0,
+  "size": 20
+}
+```
+
+**Features:**
+- Query Solana and EVM wallets separately or together
+- Real-time balance information in native tokens and USD
+- Wallet creation and update timestamps
+- Support for pagination
 
 ## Copy Trading Mechanism Description
 

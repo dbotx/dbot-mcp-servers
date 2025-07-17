@@ -12,6 +12,8 @@
 - ⚡ **灵活触发**：支持高于/低于目标价触发，防插针模式
 - 🔧 **完整管理**：创建、编辑、启用/禁用、删除限价单
 - 📊 **状态查询**：查看限价单执行状态和历史记录
+- 💳 **钱包管理**：跨链钱包查询，获取余额和钱包信息
+- 🔍 **代币安全**：全面的代币安全分析，包括持币分布和风险评估
 - ⏰ **到期处理**：可配置任务到期时是否按市价执行
 - 🛡️ **风险控制**：支持滑点、优先费、防夹等参数
 
@@ -58,7 +60,24 @@
 
 ### 必需的环境变量
 - `DBOT_API_KEY`: DBot API密钥（必需）
-- `DBOT_WALLET_ID`: 默认钱包ID（必需）
+
+### 钱包配置（至少配置一个）
+配置特定链的钱包ID。系统将根据交易链自动选择合适的钱包：
+
+#### 特定链钱包ID（优先级高）
+- `DBOT_WALLET_ID_SOLANA`: Solana 钱包ID
+- `DBOT_WALLET_ID_BASE`: Base 网络钱包ID  
+- `DBOT_WALLET_ID_ARBITRUM`: Arbitrum 网络钱包ID
+- `DBOT_WALLET_ID_BSC`: BSC 网络钱包ID
+
+#### 通用钱包ID（备选）
+- `DBOT_WALLET_ID_EVM`: 通用 EVM 钱包ID（适用于 Ethereum/Base/Arbitrum/BSC）
+- `DBOT_WALLET_ID_TRON`: Tron 钱包ID
+
+**钱包选择优先级：**
+1. 特定链钱包ID（如 Base 使用 `DBOT_WALLET_ID_BASE`）
+2. 通用链类型钱包ID（如 EVM 链使用 `DBOT_WALLET_ID_EVM`）
+3. 必须至少配置一个钱包ID，否则系统将报错
 
 ### 可选的默认参数配置
 - 如需更改可根据示例配置，如未更改将使用默认配置。
@@ -195,6 +214,36 @@
   "size": 10
 }
 ```
+
+### query_wallets
+按链类型查询用户钱包
+```json
+{
+  "type": "all",
+  "page": 0,
+  "size": 20
+}
+```
+
+**参数说明：**
+- `type` (string): 钱包类型 - "solana"查询Solana钱包，"evm"查询EVM钱包，"all"查询所有类型
+- `page` (number): 页码，从0开始
+- `size` (number): 每页条目数（1-20）
+
+### get_token_security
+获取Solana代币的全面安全信息和市场数据
+```json
+{
+  "pair": "9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump"
+}
+```
+
+**功能特性：**
+- 实时价格和市场数据
+- 持币分布分析
+- 安全风险评估
+- 代币权限状态
+- 市值和流动性指标
 
 ## ⚠️ 注意事项
 

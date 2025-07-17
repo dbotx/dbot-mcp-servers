@@ -13,6 +13,8 @@
 - 📊 **状态跟踪**: 查看任务状态和执行历史
 - 🤖 **自动执行**: 满足条件时自动触发交易
 - 🎯 **精准控制**: 支持自定义费用、滑点、重试等参数
+- 💳 **钱包管理**: 按链类型查询用户钱包（Solana/EVM）
+- 🔐 **代币安全检查**: 获取全面的代币安全信息和池子安全详情
 
 ## 快速开始
 
@@ -28,7 +30,8 @@
       "args": ["-y", "@dbotx/conditional-order-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -48,6 +51,13 @@
   - "显示进行中的任务"
   - "暂停我的条件单任务"
   - "修改开盘卖出任务的卖出比例为90%"
+- **钱包管理**：
+  - "显示我的所有钱包"
+  - "显示我的 Solana 钱包"
+  - "显示我的 EVM 钱包"
+- **代币安全检查**：
+  - "创建条件单前先检查代币 {{代币地址}} 的安全性"
+  - "显示 {{代币地址}} 的池子信息"
   - "修改跟随dev卖出任务的卖出比例为90%"
   - "删除指定的条件单任务"
 
@@ -55,7 +65,29 @@
 
 ### 必需的环境变量
 - `DBOT_API_KEY`: DBot API密钥（必需）
-- `DBOT_WALLET_ID`: 默认钱包ID（必需）
+
+### 钱包配置
+至少需要配置以下钱包ID中的一个：
+- `DBOT_WALLET_ID_SOLANA`: Solana 链钱包ID（可选）
+- `DBOT_WALLET_ID_EVM`: EVM 链钱包ID（可选，用于 Ethereum, Base, BSC）
+- `DBOT_WALLET_ID_TRON`: Tron 链钱包ID（可选）
+- `DBOT_WALLET_ID_BASE`: Base 链钱包ID（可选，优先于 EVM）
+- `DBOT_WALLET_ID_ARBITRUM`: Arbitrum 链钱包ID（可选，优先于 EVM）
+- `DBOT_WALLET_ID_BSC`: BSC 链钱包ID（可选，优先于 EVM）
+
+**优先级：** 特定链钱包ID > 通用链类型钱包ID
+
+**示例：**
+```json
+{
+  "env": {
+    "DBOT_API_KEY": "your-api-key",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
+    "DBOT_WALLET_ID_BASE": "your-base-wallet-id"
+  }
+}
+```
 
 ### 可选的默认参数配置
 以下环境变量可用于配置默认参数值。这些默认值可以在调用时被覆盖。
@@ -77,7 +109,8 @@
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_CHAIN": "solana",
     "DBOT_CUSTOM_FEE_AND_TIP": "false",
     "DBOT_PRIORITY_FEE": "",
@@ -257,6 +290,30 @@
   "state": "processing"
 }
 ```
+
+### get_user_wallets
+
+查询用户指定链类型的钱包。如果未指定类型，会查询所有类型（solana 和 evm）。
+
+**参数:**
+- `type` (string, 可选): 查询的链类型 (solana/evm)。如果未指定，查询所有类型。
+- `page` (number, 可选): 页码，默认为 0。
+- `size` (number, 可选): 每页结果数，默认为 20。
+
+### get_token_security_info
+
+获取代币安全信息和池子安全详情。**重要提示：在进行任何交易前应该调用此工具检查代币安全因素。**
+
+**参数:**
+- `chain` (string, 可选): 链名称，默认为 'solana'。
+- `pair` (string, 必需): 代币地址或交易对地址。
+
+**返回全面的代币信息，包括：**
+- 代币和池子创建时间
+- 价格和市值
+- 安全因素（mint/freeze权限、前10持有者集中度）
+- 池子流动性信息
+- 相关链接（Birdeye、Jupiter等）
 
 ## 使用场景
 

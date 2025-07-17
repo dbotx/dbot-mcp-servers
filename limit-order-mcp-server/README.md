@@ -13,6 +13,8 @@ Powered by DBot - [www.dbotx.com](https://www.dbotx.com)
 - ⚡ **Flexible Triggers**: Supports triggering above/below a target price, with an anti-spike mode.
 - 🔧 **Complete Management**: Create, edit, enable/disable, and delete limit orders.
 - 📊 **Status Query**: Check the execution status and history of limit orders.
+- 💳 **Wallet Management**: Query user wallets across different chains with balance information.
+- 🔍 **Token Security**: Comprehensive token security analysis with holder distribution and risk assessment.
 - ⏰ **Expiration Handling**: Configurable option to execute at market price upon task expiration.
 - 🛡️ **Risk Control**: Supports parameters like slippage, priority fee, and anti-sandwich.
 
@@ -59,7 +61,24 @@ Here are the environment variables explained:
 
 ### Required Environment Variables
 - `DBOT_API_KEY`: DBot API key (required)
-- `DBOT_WALLET_ID`: Default wallet ID (required)
+
+### Wallet Configuration (At least one required)
+Configure chain-specific wallet IDs. The system will automatically select the appropriate wallet based on the trading chain:
+
+#### Chain-specific Wallet IDs (Priority)
+- `DBOT_WALLET_ID_SOLANA`: Solana wallet ID
+- `DBOT_WALLET_ID_BASE`: Base network wallet ID  
+- `DBOT_WALLET_ID_ARBITRUM`: Arbitrum network wallet ID
+- `DBOT_WALLET_ID_BSC`: BSC network wallet ID
+
+#### Generic Wallet IDs (Fallback)
+- `DBOT_WALLET_ID_EVM`: Generic EVM wallet ID (for Ethereum/Base/Arbitrum/BSC)
+- `DBOT_WALLET_ID_TRON`: Tron wallet ID
+
+**Wallet Selection Priority:**
+1. Specific chain wallet ID (e.g., `DBOT_WALLET_ID_BASE` for Base)
+2. Generic chain type wallet ID (e.g., `DBOT_WALLET_ID_EVM` for EVM chains)
+3. At least one wallet ID must be configured, or the system will throw an error
 
 ### Optional Default Parameter Configuration
 - You can change the configuration according to the examples. If not changed, the default configuration will be used.
@@ -196,6 +215,36 @@ Query the list of limit orders.
   "size": 10
 }
 ```
+
+### query_wallets
+Query user wallets by chain type.
+```json
+{
+  "type": "all",
+  "page": 0,
+  "size": 20
+}
+```
+
+**Parameters:**
+- `type` (string): Wallet type - "solana" for Solana wallets, "evm" for EVM wallets, "all" for both types
+- `page` (number): Page number, starting from 0
+- `size` (number): Number of items per page (1-20)
+
+### get_token_security
+Get comprehensive token security information and market data for Solana tokens.
+```json
+{
+  "pair": "9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump"
+}
+```
+
+**Features:**
+- Real-time price and market data
+- Holder distribution analysis  
+- Security risk assessment
+- Token authority status
+- Market cap and liquidity metrics
 
 ## ⚠️ Notes
 

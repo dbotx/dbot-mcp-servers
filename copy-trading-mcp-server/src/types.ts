@@ -173,4 +173,89 @@ export interface CopyTradingTask {
   sellSettings: SellSettings;
   createdAt?: number;
   updatedAt?: number;
+}
+
+// Wallet query types
+export const WalletQueryRequestSchema = z.object({
+  type: z.enum(['solana', 'evm']).optional(),
+  page: z.number().int().min(0).default(0),
+  size: z.number().int().min(1).max(20).default(20),
+});
+
+export type WalletQueryRequest = z.infer<typeof WalletQueryRequestSchema>;
+
+export interface WalletInfo {
+  id: string;
+  name: string;
+  type: 'solana' | 'evm';
+  address: string;
+}
+
+export interface WalletQueryParams {
+  type?: 'solana' | 'evm';
+  page?: number;
+  size?: number;
+}
+
+export interface WalletQueryResponse {
+  total: number;
+  items: WalletInfo[];
+}
+
+/**
+ * Get wallet ID based on chain
+ */
+export function getWalletIdByChain(chain: Chain): string {
+  const chainUpperCase = chain.toUpperCase();
+  
+  // Check specific chain first
+  const specificWalletId = process.env[`DBOT_WALLET_ID_${chainUpperCase}`];
+  if (specificWalletId) {
+    return specificWalletId;
+  }
+  
+  // Fall back to generic chain type
+  let fallbackKey = '';
+  switch (chain) {
+    case 'solana':
+      fallbackKey = 'DBOT_WALLET_ID_SOLANA';
+      break;
+    case 'ethereum':
+    case 'base':
+    case 'bsc':
+      fallbackKey = 'DBOT_WALLET_ID_EVM';
+      break;
+    case 'tron':
+      fallbackKey = 'DBOT_WALLET_ID_TRON';
+      break;
+    default:
+      fallbackKey = 'DBOT_WALLET_ID_EVM';
+  }
+  
+  const fallbackWalletId = process.env[fallbackKey];
+  if (fallbackWalletId) {
+    return fallbackWalletId;
+  }
+  
+  throw new Error(`No wallet ID configured for chain ${chain}. Please configure at least one of the following environment variables: DBOT_WALLET_ID_SOLANA, DBOT_WALLET_ID_EVM, DBOT_WALLET_ID_TRON, DBOT_WALLET_ID_BASE, DBOT_WALLET_ID_ARBITRUM, DBOT_WALLET_ID_BSC`);
+}
+
+/**
+ * Check if at least one wallet ID is configured
+ */
+export function validateWalletIdConfig(): void {
+  const requiredEnvVars = [
+    'DBOT_WALLET_ID_SOLANA',
+    'DBOT_WALLET_ID_EVM', 
+    'DBOT_WALLET_ID_TRON',
+    'DBOT_WALLET_ID_BASE',
+    'DBOT_WALLET_ID_ARBITRUM',
+    'DBOT_WALLET_ID_BSC'
+  ];
+  
+  const hasAtLeastOne = requiredEnvVars.some(envVar => process.env[envVar]);
+  
+  if (!hasAtLeastOne) {
+    throw new Error(`At least one wallet ID must be configured. Please set one of the following environment variables: ${requiredEnvVars.join(', ')}`);
+  }
 } 

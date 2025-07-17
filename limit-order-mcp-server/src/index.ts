@@ -17,6 +17,10 @@ import {
   DeleteLimitOrdersRequestSchema,
   DeleteAllLimitOrderRequestSchema,
   LimitOrdersRequestSchema,
+  WalletQueryParams,
+  TokenSecurityQueryParams,
+  getWalletIdByChain,
+  validateWalletIdConfig,
 } from './types.js';
 
 class LimitOrderMcpServer {
@@ -36,10 +40,21 @@ class LimitOrderMcpServer {
       }
     );
 
+    // Validate wallet ID configuration
+    try {
+      validateWalletIdConfig();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('Wallet ID configuration error:', errorMessage);
+      throw error;
+    }
+
     this.client = new DbotLimitOrderClient();
     this.setupToolHandlers();
     this.setupErrorHandling();
   }
+
+
 
   private setupErrorHandling(): void {
     this.server.onerror = (error: any) => {
@@ -50,6 +65,77 @@ class LimitOrderMcpServer {
       await this.server.close();
       process.exit(0);
     });
+  }
+
+  /**
+   * Format API error message
+   */
+  private formatApiError(response: any, operation: string, request?: any): string {
+    let errorText = `❌ ${operation} failed:\n\n`;
+    
+    // Show error status
+    errorText += `🔍 Error Status: ${response.err ? 'Failed' : 'Unknown Error'}\n`;
+    
+    // Show response content
+    if (response.res) {
+      errorText += `📄 API Response: ${JSON.stringify(response.res, null, 2)}\n`;
+    }
+    
+    // Show request parameters (exclude sensitive info)
+    if (request) {
+      const safeRequest = { ...request };
+      if (safeRequest.walletId) {
+        safeRequest.walletId = safeRequest.walletId.substring(0, 8) + '***';
+      }
+      errorText += `📋 Request Parameters: ${JSON.stringify(safeRequest, null, 2)}\n`;
+    }
+    
+    // Show documentation link
+    errorText += `\n📚 Documentation: ${response.docs || 'https://dbotx.com/docs'}`;
+    
+    return errorText;
+  }
+
+  /**
+   * Format network error message
+   */
+  private formatNetworkError(error: any, operation: string, request?: any): string {
+    let errorText = `❌ ${operation} failed:\n\n`;
+    
+    if (error.response) {
+      // HTTP error response
+      errorText += `🌐 HTTP Status: ${error.response.status} ${error.response.statusText}\n`;
+      errorText += `📄 Error Response: ${JSON.stringify(error.response.data, null, 2)}\n`;
+    } else if (error.request) {
+      // Network request failed
+      errorText += `🔌 Network Error: No response received, please check network connection\n`;
+      errorText += `📡 Request Details: ${error.message}\n`;
+    } else {
+      // Other errors
+      errorText += `⚠️ Unknown Error: ${error.message}\n`;
+    }
+    
+    // Show request parameters (exclude sensitive info)
+    if (request) {
+      const safeRequest = { ...request };
+      if (safeRequest.walletId) {
+        safeRequest.walletId = safeRequest.walletId.substring(0, 8) + '***';
+      }
+      if (safeRequest.walletIdList) {
+        safeRequest.walletIdList = safeRequest.walletIdList.map((id: string) => 
+          id.substring(0, 8) + '***'
+        );
+      }
+      errorText += `📋 Request Parameters: ${JSON.stringify(safeRequest, null, 2)}\n`;
+    }
+    
+    errorText += `\n💡 Suggestions:\n`;
+    errorText += `- Check if API key is correct\n`;
+    errorText += `- Check if network connection is normal\n`;
+    errorText += `- Check if parameter format is correct\n`;
+    errorText += `- Check if wallet ID is valid\n`;
+    
+    return errorText;
   }
 
   private setupToolHandlers(): void {
@@ -409,6 +495,49 @@ Example:
               },
             },
           },
+          {
+            name: 'get_user_wallets',
+            description: 'Query user\'s wallets for a specific chain type. If no type is specified, it will query all types (solana and evm). The tool returns formatted data in English, but you should present the results to the user in their preferred language. Please print details. Note: type parameter can be left empty to query all wallet types.',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                type: {
+                  type: 'string', 
+                  enum: ['solana', 'evm'],
+                  description: 'Chain type to query (solana/evm). Optional - if not provided, will query all wallet types.',
+                },
+                page: {
+                  type: 'number',
+                  description: 'Page number',
+                  default: 0,
+                },
+                size: {
+                  type: 'number',
+                  description: 'Number of results per page',
+                  default: 20,
+                },
+              },
+            },
+          },
+          {
+            name: 'get_token_security_info',
+            description: 'Get token security information and pool safety details. **Important: Please call this tool before making any trading transactions to check token security factors. If unsafe factors are detected, warn the user instead of proceeding with other trading tools.** The tool returns formatted data in English, but you should present the results to the user in their preferred language. Please print details. (For numbers with many decimal places, they will be simplified (e.g. $0.0₅132 instead of $0.0₅132391, 841.01 SOL instead of 841.012585 SOL).)',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                chain: {
+                  type: 'string',
+                  description: 'Chain name',
+                  default: 'solana',
+                },
+                pair: {
+                  type: 'string',
+                  description: 'Token address or trading pair address (required)',
+                },
+              },
+              required: ['pair'],
+            },
+          },
         ],
       };
     });
@@ -432,6 +561,10 @@ Example:
             return await this.handleDeleteAllLimitOrders(args);
           case 'limit_orders':
             return await this.handleLimitOrders(args);
+          case 'get_user_wallets':
+            return await this.handleGetUserWallets(args);
+          case 'get_token_security_info':
+            return await this.handleGetTokenSecurityInfo(args);
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
         }
@@ -447,12 +580,10 @@ Example:
   }
 
   private async handleCreateLimitOrder(args: any) {
-    // Use environment variable if walletId not provided
+    // Use chain-specific environment variable if walletId not provided
     if (!args.walletId) {
-      args.walletId = process.env.DBOT_WALLET_ID;
-      if (!args.walletId) {
-        throw new Error('Wallet ID not provided: Please specify walletId in parameters or set DBOT_WALLET_ID environment variable');
-      }
+      const chain = args.chain || 'solana';
+      args.walletId = getWalletIdByChain(chain);
     }
     
     const validatedArgs = CreateLimitOrderRequestSchema.parse(args);
@@ -776,6 +907,333 @@ Example:
           {
             type: 'text',
             text: `❌ Error querying limit orders: ${errorMessage}`,
+          },
+        ],
+      };
+    }
+  }
+
+  private async handleGetUserWallets(args: any) {
+    try {
+      const page = args.page || 0;
+      const size = args.size || 20;
+      
+      // If no type specified or empty string, query all types
+      if (!args.type || args.type === '') {
+        const [solanaResponse, evmResponse] = await Promise.all([
+          this.client.getWallets({ type: 'solana', page, size }),
+          this.client.getWallets({ type: 'evm', page, size }),
+        ]);
+        
+        // Check for errors in either response
+        if (solanaResponse.err && evmResponse.err) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: this.formatApiError(solanaResponse, 'Query user wallets', { type: 'all', page, size }),
+              },
+            ],
+          };
+        }
+        
+        // Combine results
+        const solanaWallets = solanaResponse.err ? [] : (solanaResponse.res || []);
+        const evmWallets = evmResponse.err ? [] : (evmResponse.res || []);
+        const allWallets = [...solanaWallets, ...evmWallets];
+        
+        let result = `💳 User Wallets Query Results (${allWallets.length} wallets total):\n\n`;
+        
+        if (allWallets.length === 0) {
+          result += 'No wallets found\n';
+        } else {
+          // Group by type for better organization
+          const solanaCount = solanaWallets.length;
+          const evmCount = evmWallets.length;
+          
+          if (solanaCount > 0) {
+            result += `🔶 Solana Wallets (${solanaCount}):\n`;
+            solanaWallets.forEach((wallet, index) => {
+              result += `${index + 1}. Wallet ID: ${wallet.id}\n`;
+              result += `   Name: ${wallet.name}\n`;
+              result += `   Type: ${wallet.type}\n`;
+              result += `   Address: ${wallet.address}\n\n`;
+            });
+          }
+          
+          if (evmCount > 0) {
+            result += `🔷 EVM Wallets (${evmCount}):\n`;
+            evmWallets.forEach((wallet, index) => {
+              result += `${index + 1}. Wallet ID: ${wallet.id}\n`;
+              result += `   Name: ${wallet.name}\n`;
+              result += `   Type: ${wallet.type}\n`;
+              result += `   Address: ${wallet.address}\n\n`;
+            });
+          }
+        }
+        
+        result += `\n📚 Documentation: ${solanaResponse.docs || evmResponse.docs}`;
+        
+        return {
+          content: [
+            {
+              type: 'text',
+              text: result,
+            },
+          ],
+        };
+      }
+      
+      // If type is specified, query only that type
+      const params: WalletQueryParams = {
+        type: args.type,
+        page,
+        size,
+      };
+      
+      const response = await this.client.getWallets(params);
+      
+      if (response.err) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: this.formatApiError(response, 'Query user wallets', params),
+            },
+          ],
+        };
+      }
+
+      const wallets = response.res || [];
+      let result = `💳 User Wallets Query Results (${wallets.length} ${args.type} wallets):\n\n`;
+      
+      if (wallets.length === 0) {
+        result += 'No wallets found\n';
+      } else {
+        wallets.forEach((wallet, index) => {
+          result += `${index + 1}. Wallet ID: ${wallet.id}\n`;
+          result += `   Name: ${wallet.name}\n`;
+          result += `   Type: ${wallet.type}\n`;
+          result += `   Address: ${wallet.address}\n\n`;
+        });
+      }
+
+      result += `\n📚 Documentation: ${response.docs}`;
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: result,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: this.formatNetworkError(error, 'Query user wallets', args),
+          },
+        ],
+      };
+    }
+  }
+
+  private formatPrice(price: number): string {
+    if (price >= 1) {
+      return price.toFixed(2);
+    }
+    
+    const priceStr = price.toString();
+    const parts = priceStr.split('.');
+    if (parts.length < 2) return priceStr;
+    
+    const decimal = parts[1];
+    let leadingZeros = 0;
+    for (let i = 0; i < decimal.length; i++) {
+      if (decimal[i] === '0') {
+        leadingZeros++;
+      } else {
+        break;
+      }
+    }
+    
+    if (leadingZeros >= 3) {
+      const significantDigits = decimal.substring(leadingZeros, leadingZeros + 4);
+      return `0.0_{${leadingZeros}}_${significantDigits}`;
+    } else {
+      return price.toFixed(leadingZeros + 4);
+    }
+  }
+
+  private formatMarketCap(marketCap: number): string {
+    if (marketCap >= 1e9) {
+      return `${(marketCap / 1e9).toFixed(2)}B`;
+    } else if (marketCap >= 1e6) {
+      return `${(marketCap / 1e6).toFixed(2)}M`;
+    } else if (marketCap >= 1e3) {
+      return `${(marketCap / 1e3).toFixed(2)}K`;
+    } else {
+      return marketCap.toFixed(2);
+    }
+  }
+
+  private formatTime(createTime: number): string {
+    const now = Date.now();
+    const diffMs = now - createTime;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    
+    const parts = [];
+    if (diffDays > 0) parts.push(`${diffDays}d`);
+    if (diffHours > 0) parts.push(`${diffHours}h`);
+    if (diffMinutes > 0) parts.push(`${diffMinutes}m`);
+    
+    return parts.length > 0 ? parts.join(' ') : '0m';
+  }
+
+  private async handleGetTokenSecurityInfo(args: any) {
+    try {
+      const params: TokenSecurityQueryParams = {
+        chain: args.chain || 'solana',
+        pair: args.pair,
+      };
+      
+      const response = await this.client.getTokenSecurityInfo(params);
+      
+      if (response.err) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: this.formatApiError(response, 'Query token security info', params),
+            },
+          ],
+        };
+      }
+
+      const tokenInfo = response.res;
+      if (!tokenInfo) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: '❌ Token information not found',
+            },
+          ],
+        };
+      }
+
+      // Format the response according to the user's requirements
+      const formatPrice = (price: number): string => {
+        if (price >= 1) {
+          return `$${price.toFixed(2)}`;
+        } else if (price >= 0.0001) {
+          return `$${price.toFixed(4)}`;
+        } else {
+          const str = price.toFixed(20);
+          const match = str.match(/^0\.0*(\d+)/);
+          if (match) {
+            const leadingZeros = str.indexOf(match[1]) - 2;
+            const subscriptNumbers = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
+            const subscript = leadingZeros.toString().split('').map(digit => subscriptNumbers[parseInt(digit)] || digit).join('');
+            // Limit to first 4 non-zero digits
+            const significantDigits = match[1].substring(0, 4);
+            return `$0.0${subscript}${significantDigits}`;
+          }
+          return `$${price.toExponential(2)}`;
+        }
+      };
+
+      const formatMarketCap = (mcap: number): string => {
+        if (mcap >= 1000000000) {
+          return `$${(mcap / 1000000000).toFixed(2)}B`;
+        } else if (mcap >= 1000000) {
+          return `$${(mcap / 1000000).toFixed(2)}M`;
+        } else if (mcap >= 1000) {
+          return `$${(mcap / 1000).toFixed(2)}K`;
+        } else {
+          return `$${mcap.toFixed(2)}`;
+        }
+      };
+
+      const formatTimeAgo = (timestamp: number): string => {
+        const now = Date.now();
+        const diff = now - timestamp;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        
+        let result = '';
+        if (days > 0) {
+          result += `${days}d `;
+        }
+        if (hours > 0) {
+          result += `${hours}h `;
+        }
+        if (minutes > 0 || result === '') {
+          result += `${minutes}m`;
+        }
+        
+        return result.trim();
+      };
+
+      const tokenCreateTime = formatTimeAgo(tokenInfo.tokenCreateAt);
+      const poolCreateTime = formatTimeAgo(tokenInfo.poolCreateAt);
+
+      let result = `📌 ${tokenInfo.tokenInfo.symbol}\n`;
+      result += `${tokenInfo.tokenInfo.contract}\n\n`;
+      
+      result += `⚖️ Trading\n`;
+      result += `┣ Price: ${formatPrice(tokenInfo.tokenPriceUsd)}\n`;
+      result += `┣ Market Cap: ${formatMarketCap(tokenInfo.tokenMcUsd)}\n`;
+      result += `┣ Token Created: ${tokenCreateTime}\n`;
+      result += `┣ Pool Created: ${poolCreateTime}\n`;
+      result += `┣ DEX: ${tokenInfo.exchange}\n`;
+      result += `┣ Pair: ${tokenInfo.tokenInfo.symbol}/${tokenInfo.currencyInfo.symbol}\n`;
+      result += `┗ ${tokenInfo.currencyInfo.symbol} in Pool: ${parseFloat(tokenInfo.poolSafetyInfo.currencyReserveUI || tokenInfo.currencyReserve).toFixed(2)} ${tokenInfo.currencyInfo.symbol}\n\n`;
+
+      result += `🔎 Security\n`;
+      const safety = tokenInfo.poolSafetyInfo;
+      result += `┣ ${safety.canMint ? '❌ Mint Authority Not Revoked' : '✅ Mint Authority Revoked'} ${safety.canFrozen ? '❌ Freeze Authority Not Revoked' : '✅ Freeze Authority Revoked'}\n`;
+      result += `┗ ${safety.top10Percent < 0.3 ? '✅' : '❌'} Top 10 Holders (${(safety.top10Percent * 100).toFixed(2)}%)\n\n`;
+
+      result += `🔗 Links\n`;
+      const links = [];
+      if (tokenInfo.links?.website) {
+        links.push(`[Website](${tokenInfo.links.website})`);
+      }
+      if (tokenInfo.links?.twitter) {
+        links.push(`[Twitter](${tokenInfo.links.twitter})`);
+      }
+      if (tokenInfo.links?.telegram) {
+        links.push(`[Telegram](${tokenInfo.links.telegram})`);
+      }
+      
+      // Add default links for Solana
+      if (params.chain === 'solana') {
+        links.push(`[Birdeye](https://birdeye.so/token/${tokenInfo.tokenInfo.contract})`);
+        links.push(`[Jupiter](https://jup.ag/swap/SOL-${tokenInfo.tokenInfo.contract})`);
+      }
+      
+      result += `┗ ${links.join(' | ')}\n`;
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: result,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: this.formatNetworkError(error, 'Query token security info', args),
           },
         ],
       };

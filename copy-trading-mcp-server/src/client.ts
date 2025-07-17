@@ -6,6 +6,8 @@ import type {
   DeleteCopyTradingRequest,
   ApiResponse,
   CopyTradingTask,
+  WalletInfo,
+  WalletQueryParams,
 } from './types.js';
 
 export class DbotCopyTradingClient {
@@ -89,6 +91,23 @@ export class DbotCopyTradingClient {
     };
     
     const response = await this.client.get(url, { params });
+    return response.data;
+  }
+
+  // --- Wallet Management Methods ---
+
+  /**
+   * Get user wallets
+   */
+  async getWallets(params: WalletQueryParams = {}): Promise<ApiResponse<WalletInfo[]>> {
+    const url = '/account/wallets';
+    const queryParams = {
+      type: params.type || 'solana',
+      page: params.page || 0,
+      size: params.size || 20,
+    };
+    
+    const response = await this.client.get(url, { params: queryParams });
     return response.data;
   }
 } 

@@ -676,14 +676,14 @@ class FastSwapMcpServer {
           },
           {
             name: 'get_user_wallets',
-            description: 'Query user\'s wallets for a specific chain type. If no type is specified, it will query all types (solana and evm). The tool returns formatted data in English, but you should present the results to the user in their preferred language. Please print details.',
+            description: 'Query user\'s wallets for a specific chain type. If no type is specified, it will query all types (solana and evm). The tool returns formatted data in English, but you should present the results to the user in their preferred language. Please print details. Note: type parameter can be left empty to query all wallet types.',
             inputSchema: {
               type: 'object',
               properties: {
                 type: {
-                  type: 'string',
+                  type: 'string', 
                   enum: ['solana', 'evm'],
-                  description: 'Chain type to query (solana/evm). If not specified, queries all types.',
+                  description: 'Chain type to query (solana/evm). Optional - if not provided, will query all wallet types.',
                 },
                 page: {
                   type: 'number',
@@ -1195,8 +1195,8 @@ class FastSwapMcpServer {
       const page = args.page || 0;
       const size = args.size || 20;
       
-      // If no type specified, query all types
-      if (!args.type) {
+      // If no type specified or empty string, query all types
+      if (!args.type || args.type === '') {
         const [solanaResponse, evmResponse] = await Promise.all([
           this.client.getWallets({ type: 'solana', page, size }),
           this.client.getWallets({ type: 'evm', page, size }),

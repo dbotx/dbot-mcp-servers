@@ -13,6 +13,8 @@ Conditional Order MCP Server - Supports creating and managing automated trading 
 - 📊 **Status Tracking**: View task status and execution history.
 - 🤖 **Automated Execution**: Automatically triggers trades when conditions are met.
 - 🎯 **Precise Control**: Supports custom fees, slippage, retries, and other parameters.
+- 💳 **Wallet Management**: Query user wallets by chain type (Solana/EVM).
+- 🔐 **Token Security Check**: Get comprehensive token security information and pool safety details.
 
 ## Quick Start
 
@@ -28,7 +30,8 @@ Add the following to your MCP client configuration:
       "args": ["-y", "@dbotx/conditional-order-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -48,6 +51,13 @@ Add the following to your MCP client configuration:
   - "Display my ongoing tasks."
   - "Pause my conditional order tasks."
   - "Change the sell percentage of my sell-on-open task to 90%."
+- **Wallet Management**:
+  - "Show me all my wallets."
+  - "Show me my Solana wallets."
+  - "Show me my EVM wallets."
+- **Token Security Check**:
+  - "Check the security of token {{token_address}} before I create a conditional order."
+  - "Show me the pool information for {{token_address}}."
   - "Change the sell percentage of my follow-dev-sell task to 90%."
   - "Delete a specific conditional order task."
 
@@ -55,7 +65,29 @@ Add the following to your MCP client configuration:
 
 ### Required Environment Variables
 - `DBOT_API_KEY`: DBot API key (required).
-- `DBOT_WALLET_ID`: Default wallet ID (required).
+
+### Wallet Configuration
+At least one of the following wallet IDs must be configured:
+- `DBOT_WALLET_ID_SOLANA`: Solana chain wallet ID (optional)
+- `DBOT_WALLET_ID_EVM`: EVM chain wallet ID (optional, used for Ethereum, Base, BSC)
+- `DBOT_WALLET_ID_TRON`: Tron chain wallet ID (optional)
+- `DBOT_WALLET_ID_BASE`: Base chain wallet ID (optional, takes priority over EVM)
+- `DBOT_WALLET_ID_ARBITRUM`: Arbitrum chain wallet ID (optional, takes priority over EVM)
+- `DBOT_WALLET_ID_BSC`: BSC chain wallet ID (optional, takes priority over EVM)
+
+**Priority:** Specific chain wallet ID > Generic chain type wallet ID
+
+**Example:**
+```json
+{
+  "env": {
+    "DBOT_API_KEY": "your-api-key",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
+    "DBOT_WALLET_ID_BASE": "your-base-wallet-id"
+  }
+}
+```
 
 ### Optional Default Parameter Configuration
 The following environment variables can be used to configure default parameter values. These defaults can be overridden at runtime.
@@ -77,7 +109,8 @@ The following environment variables can be used to configure default parameter v
 {
   "env": {
     "DBOT_API_KEY": "your-api-key",
-    "DBOT_WALLET_ID": "your-wallet-id",
+    "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+    "DBOT_WALLET_ID_EVM": "your-evm-wallet-id",
     "DBOT_CHAIN": "solana",
     "DBOT_CUSTOM_FEE_AND_TIP": "false",
     "DBOT_PRIORITY_FEE": "",
@@ -258,6 +291,30 @@ Get all of the user's follow-dev-sell tasks, with support for pagination and sta
 }
 ```
 
+### get_user_wallets
+
+Query user's wallets for a specific chain type. If no type is specified, it will query all types (solana and evm).
+
+**Parameters:**
+- `type` (string, optional): Chain type to query (solana/evm). If not specified, queries all types.
+- `page` (number, optional): Page number, defaults to 0.
+- `size` (number, optional): Number of results per page, defaults to 20.
+
+### get_token_security_info
+
+Get token security information and pool safety details. **Important: This tool should be called before making any trading transactions to check token security factors.**
+
+**Parameters:**
+- `chain` (string, optional): Chain name, defaults to 'solana'.
+- `pair` (string, required): Token address or trading pair address.
+
+**Returns comprehensive token information including:**
+- Token and pool creation time
+- Price and market cap
+- Security factors (mint/freeze authority, top holder concentration)
+- Pool liquidity information
+- Relevant links (Birdeye, Jupiter, etc.)
+
 ## Use Cases
 
 ### 1. Sell-on-Open Strategy
@@ -305,7 +362,7 @@ Combine sell-on-open and follow-dev-sell for multi-layered risk control:
 
 ## Important Notes
 
-1.  **Wallet Configuration**: The `walletId` parameter is optional. If not provided, the wallet ID from the `DBOT_WALLET_ID` environment variable will be used.
+1.  **Wallet Configuration**: The `walletId` parameter is optional. If not provided, the system will automatically select an appropriate wallet ID based on the chain configuration.
 2.  **Token Type**:
     - `pump`: Indicates the token has not yet been listed on Raydium.
     - `raydium_amm`: Indicates the token has been listed on Raydium.

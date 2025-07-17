@@ -14,6 +14,7 @@
 - ⚡ **多链支持**: 支持多链跟单交易（Solana, Ethereum, Base, BSC, Tron）
 - 💰 **灵活买入**: 支持固定金额、固定比例、跟随金额三种买入模式
 - 📊 **智能卖出**: 支持跟随卖出、止盈止损、混合模式等多种卖出策略
+- 💳 **钱包管理**: 跨链钱包查询，获取余额和钱包信息
 - 🛡️ **风险控制**: 全面的代币过滤、税率检查、持仓限制等风险控制机制
 - 🔧 **任务管理**: 创建、编辑、开关、删除跟单任务
 - 📈 **实时监控**: 支持多DEX跟随和黑名单管理
@@ -64,7 +65,24 @@
 
 ### 必需的环境变量
 - `DBOT_API_KEY`: DBot API密钥（必需）
-- `DBOT_WALLET_ID`: 默认钱包ID（必需）
+
+### 钱包配置（至少配置一个）
+配置特定链的钱包ID。系统将根据交易链自动选择合适的钱包：
+
+#### 特定链钱包ID（优先级高）
+- `DBOT_WALLET_ID_SOLANA`: Solana 钱包ID
+- `DBOT_WALLET_ID_BASE`: Base 网络钱包ID  
+- `DBOT_WALLET_ID_ARBITRUM`: Arbitrum 网络钱包ID
+- `DBOT_WALLET_ID_BSC`: BSC 网络钱包ID
+
+#### 通用钱包ID（备选）
+- `DBOT_WALLET_ID_EVM`: 通用 EVM 钱包ID（适用于 Ethereum/Base/Arbitrum/BSC）
+- `DBOT_WALLET_ID_TRON`: Tron 钱包ID
+
+**钱包选择优先级：**
+1. 特定链钱包ID（如 Base 使用 `DBOT_WALLET_ID_BASE`）
+2. 通用链类型钱包ID（如 EVM 链使用 `DBOT_WALLET_ID_EVM`）
+3. 必须至少配置一个钱包ID，否则系统将报错
 
 ### 可选的默认参数配置
 - 如需更改可根据示例配置，如未更改将使用默认配置。
@@ -300,6 +318,30 @@
   "size": 20
 }
 ```
+
+### query_wallets
+
+按链类型查询用户钱包
+
+**参数:**
+- `type` (string): 钱包类型 - "solana"查询Solana钱包，"evm"查询EVM钱包，"all"查询所有类型
+- `page` (number): 页码，从0开始
+- `size` (number): 每页条目数（1-20）
+
+**示例:**
+```json
+{
+  "type": "all",
+  "page": 0,
+  "size": 20
+}
+```
+
+**功能特性:**
+- 支持分别或同时查询Solana和EVM钱包
+- 提供原生代币和USD的实时余额信息
+- 包含钱包创建和更新时间戳
+- 支持分页查询
 
 ## 跟单机制说明
 
