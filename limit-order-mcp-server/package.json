@@ -1,6 +1,6 @@
 {
   "name": "@dbotx/limit-order-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Limit Order MCP Server - Supporting multi-chain limit orders, precise price triggers, and flexible order management. A professional cross-chain MCP trading service supporting DEX trading on multiple chains including Solana, Ethereum, BSC and more.",
   "keywords": [
     "mcp",

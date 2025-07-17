@@ -1,6 +1,6 @@
 {
   "name": "@dbotx/conditional-order-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Conditional Order MCP Server - Supports creating and managing conditional orders, automatically executing trades based on specific conditions",
   "keywords": ["mcp", "dbot", "conditional-order", "trading", "crypto", "blockchain", "DEX", "DeFi", "cross-chain", "solana", "ethereum", "bsc", "web3"],
   "author": "dbotx",
