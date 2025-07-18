@@ -173,7 +173,7 @@ export interface CopyTradingTask {
   sellSettings: SellSettings;
   createdAt?: number;
   updatedAt?: number;
-}
+} 
 
 // Wallet query types
 export const WalletQueryRequestSchema = z.object({

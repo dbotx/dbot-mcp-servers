@@ -20,7 +20,7 @@ Optimized for executing token swaps as quickly as possible.
 - **Order Query**: Query transaction order status and details.
 - **Take-Profit/Stop-Loss**: Manage take-profit and stop-loss tasks.
 - **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM), providing essential wallet information for trading operations.
-- **Token Security Analysis**: Comprehensive token security and market information including price, market cap, creation time, liquidity, security factors, and trading data.
+- **Token Market & Security Information**: Provides token market and security information including price, market cap, creation time, liquidity, security factors, and trading data.
 
 **▶️ Quick Start:**
 ```json
@@ -51,7 +51,7 @@ Allows you to place limit orders, which are executed when the token reaches a sp
 - **Complete Management**: Create, edit, enable/disable, and delete limit orders.
 - **Expiration Handling**: Configurable option to execute at market price upon task expiration.
 - **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM), providing essential wallet information for trading operations.
-- **Token Security Analysis**: Comprehensive token security and market information including price, market cap, creation time, liquidity, security factors, and trading data.
+- **Token Market & Security Information**: Provides token market and security information including price, market cap, creation time, liquidity, security factors, and trading data.
 
 **▶️ Quick Start:**
 ```json
@@ -112,7 +112,7 @@ Provides automated trading tasks like "Sell on Open" and "Follow Dev's Sell".
 - **Smart Monitoring**: Real-time monitoring of token status and developer behavior.
 - **Flexible Management**: Create, edit, enable/disable, and delete tasks.
 - **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM), providing essential wallet information for trading operations.
-- **Token Security Analysis**: Comprehensive token security and market information including price, market cap, creation time, liquidity, security factors, and trading data.
+- **Token Market & Security Information**: Provides token market and security information including price, market cap, creation time, liquidity, security factors, and trading data.
 
 **▶️ Quick Start:**
 ```json

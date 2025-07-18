@@ -15,7 +15,7 @@ Here is a summary of the features:
 - 📊 **Order Query**: Query transaction order status and details.
 - 📈 **Take-Profit/Stop-Loss**: Manage take-profit and stop-loss tasks.
 - 💳 **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM) - provides essential wallet information for trading operations, not balance data.
-- 🔐 **Token Security & Market Analysis**: Get comprehensive token information including security factors, price data, market cap, creation time, liquidity, trading volume, and pool safety details.
+- 🔐 **Token Market & Security Information**: Provides token market and security information including price data, market cap, creation time, liquidity, trading volume, and pool safety details.
 
 ## Quick Start
 
@@ -330,13 +330,13 @@ Query user wallet IDs and addresses for a specific chain type. If no type is spe
 
 ### get_token_security_info
 
-Get comprehensive token security and market analysis. **Important: This tool should be called before making any trading transactions to check token security factors and market conditions.**
+Get token market and security information.
 
 **Parameters:**
 - `chain` (string, optional): Chain name, defaults to 'solana'.
 - `pair` (string, required): Token address or trading pair address.
 
-**Returns comprehensive token information including:**
+**Returns token market and security information including:**
 - Token and pool creation time
 - Current price and market cap
 - Trading volume and liquidity data

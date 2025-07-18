@@ -182,7 +182,7 @@ export interface LimitOrder {
   currencyInfo: CurrencyInfo;
   tokenInfo: TokenInfo;
   links: Links;
-}
+} 
 
 // Wallet query types
 export const WalletQueryRequestSchema = z.object({

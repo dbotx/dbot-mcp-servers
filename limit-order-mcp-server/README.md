@@ -14,7 +14,7 @@ Powered by DBot - [www.dbotx.com](https://www.dbotx.com)
 - 🔧 **Complete Management**: Create, edit, enable/disable, and delete limit orders.
 - 📊 **Status Query**: Check the execution status and history of limit orders.
 - 💳 **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM) - provides essential wallet information for trading operations, not balance data.
-- 🔍 **Token Security & Market Analysis**: Comprehensive token information including security factors, price data, market cap, creation time, liquidity, trading volume, holder distribution and risk assessment.
+- 🔍 **Token Market & Security Information**: Provides token market and security information including price data, market cap, creation time, liquidity, trading volume, holder distribution and security details.
 - ⏰ **Expiration Handling**: Configurable option to execute at market price upon task expiration.
 - 🛡️ **Risk Control**: Supports parameters like slippage, priority fee, and anti-sandwich.
 
@@ -237,14 +237,14 @@ Query user wallet IDs and addresses by chain type. This provides essential walle
 **Returns:** Wallet ID, name, type, and address for each wallet.
 
 ### get_token_security_info
-Get comprehensive token security and market analysis. **Important: This tool should be called before making any trading transactions to check token security factors and market conditions.**
+Get token market and security information.
 ```json
 {
   "pair": "9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump"
 }
 ```
 
-**Returns comprehensive token information including:**
+**Returns token market and security information including:**
 - Token and pool creation time
 - Current price and market cap
 - Trading volume and liquidity data
