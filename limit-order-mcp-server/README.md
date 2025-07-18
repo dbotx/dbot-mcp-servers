@@ -13,8 +13,8 @@ Powered by DBot - [www.dbotx.com](https://www.dbotx.com)
 - ⚡ **Flexible Triggers**: Supports triggering above/below a target price, with an anti-spike mode.
 - 🔧 **Complete Management**: Create, edit, enable/disable, and delete limit orders.
 - 📊 **Status Query**: Check the execution status and history of limit orders.
-- 💳 **Wallet Management**: Query user wallets across different chains with balance information.
-- 🔍 **Token Security**: Comprehensive token security analysis with holder distribution and risk assessment.
+- 💳 **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM) - provides essential wallet information for trading operations, not balance data.
+- 🔍 **Token Security & Market Analysis**: Comprehensive token information including security factors, price data, market cap, creation time, liquidity, trading volume, holder distribution and risk assessment.
 - ⏰ **Expiration Handling**: Configurable option to execute at market price upon task expiration.
 - 🛡️ **Risk Control**: Supports parameters like slippage, priority fee, and anti-sandwich.
 
@@ -219,35 +219,38 @@ Query the list of limit orders.
 }
 ```
 
-### query_wallets
-Query user wallets by chain type.
+### get_user_wallets
+Query user wallet IDs and addresses by chain type. This provides essential wallet information for trading operations, not balance data.
 ```json
 {
-  "type": "all",
+  "type": "solana",
   "page": 0,
   "size": 20
 }
 ```
 
 **Parameters:**
-- `type` (string): Wallet type - "solana" for Solana wallets, "evm" for EVM wallets, "all" for both types
+- `type` (string): Chain type - "solana" for Solana wallets, "evm" for EVM wallets. If not specified, queries all types
 - `page` (number): Page number, starting from 0
 - `size` (number): Number of items per page (1-20)
 
-### get_token_security
-Get comprehensive token security information and market data for Solana tokens.
+**Returns:** Wallet ID, name, type, and address for each wallet.
+
+### get_token_security_info
+Get comprehensive token security and market analysis. **Important: This tool should be called before making any trading transactions to check token security factors and market conditions.**
 ```json
 {
   "pair": "9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump"
 }
 ```
 
-**Features:**
-- Real-time price and market data
-- Holder distribution analysis  
-- Security risk assessment
-- Token authority status
-- Market cap and liquidity metrics
+**Returns comprehensive token information including:**
+- Token and pool creation time
+- Current price and market cap
+- Trading volume and liquidity data
+- Security factors (mint/freeze authority, top holder concentration)
+- Pool liquidity and safety information
+- Relevant links (Birdeye, Jupiter, etc.)
 
 ## ⚠️ Notes
 

@@ -14,7 +14,7 @@ Here's an overview of the features:
 - ⚡ **Multi-chain Support**: Supports multi-chain copy trading (Solana, Ethereum, Base, BSC, Tron)
 - 💰 **Flexible Buying**: Supports fixed amount, fixed ratio, and follow amount buying modes
 - 📊 **Smart Selling**: Supports follow selling, take-profit/stop-loss, mixed mode, and other selling strategies
-- 💳 **Wallet Management**: Query user wallets across different chains with balance information
+- 💳 **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM) - provides essential wallet information for trading operations, not balance data
 - 🛡️ **Risk Control**: Comprehensive token filtering, tax rate checks, position limits, and other risk control mechanisms
 - 🔧 **Task Management**: Create, edit, enable/disable, and delete copy trading tasks
 - 📈 **Real-time Monitoring**: Supports multi-DEX following and blacklist management
@@ -323,29 +323,25 @@ Get copy trading task list
 }
 ```
 
-### query_wallets
+### get_user_wallets
 
-Query user wallets by chain type
+Query user wallet IDs and addresses by chain type. This provides essential wallet information for trading operations, not balance data.
 
 **Parameters:**
-- `type` (string): Wallet type - "solana" for Solana wallets, "evm" for EVM wallets, "all" for both types
+- `type` (string): Chain type - "solana" for Solana wallets, "evm" for EVM wallets. If not specified, queries all types
 - `page` (number): Page number, starting from 0
 - `size` (number): Number of items per page (1-20)
 
 **Example:**
 ```json
 {
-  "type": "all",
+  "type": "solana",
   "page": 0,
   "size": 20
 }
 ```
 
-**Features:**
-- Query Solana and EVM wallets separately or together
-- Real-time balance information in native tokens and USD
-- Wallet creation and update timestamps
-- Support for pagination
+**Returns:** Wallet ID, name, type, and address for each wallet.
 
 ## Copy Trading Mechanism Description
 

@@ -19,6 +19,8 @@ Optimized for executing token swaps as quickly as possible.
 - **Multi-Wallet Support**: Supports trading with multiple wallets simultaneously.
 - **Order Query**: Query transaction order status and details.
 - **Take-Profit/Stop-Loss**: Manage take-profit and stop-loss tasks.
+- **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM), providing essential wallet information for trading operations.
+- **Token Security Analysis**: Comprehensive token security and market information including price, market cap, creation time, liquidity, security factors, and trading data.
 
 **▶️ Quick Start:**
 ```json
@@ -29,7 +31,8 @@ Optimized for executing token swaps as quickly as possible.
       "args": ["-y", "@dbotx/fast-swap-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -47,6 +50,8 @@ Allows you to place limit orders, which are executed when the token reaches a sp
 - **Flexible Triggers**: Supports triggering above/below a target price.
 - **Complete Management**: Create, edit, enable/disable, and delete limit orders.
 - **Expiration Handling**: Configurable option to execute at market price upon task expiration.
+- **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM), providing essential wallet information for trading operations.
+- **Token Security Analysis**: Comprehensive token security and market information including price, market cap, creation time, liquidity, security factors, and trading data.
 
 **▶️ Quick Start:**
 ```json
@@ -57,7 +62,8 @@ Allows you to place limit orders, which are executed when the token reaches a sp
       "args": ["-y", "@dbotx/limit-order-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -75,6 +81,7 @@ Enables you to automatically copy the trades of other wallets.
 - **Flexible Buying**: Supports fixed amount, fixed ratio, and follow amount buying modes.
 - **Smart Selling**: Supports various selling strategies like follow selling and take-profit/stop-loss.
 - **Risk Control**: Comprehensive token filtering, tax checks, and other risk controls.
+- **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM), providing essential wallet information for trading operations.
 
 **▶️ Quick Start:**
 ```json
@@ -85,7 +92,8 @@ Enables you to automatically copy the trades of other wallets.
       "args": ["-y", "@dbotx/copy-trading-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }
@@ -103,6 +111,8 @@ Provides automated trading tasks like "Sell on Open" and "Follow Dev's Sell".
 - **Follow Dev's Sell**: Automatically follow and sell when a developer sells a specified percentage of tokens.
 - **Smart Monitoring**: Real-time monitoring of token status and developer behavior.
 - **Flexible Management**: Create, edit, enable/disable, and delete tasks.
+- **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM), providing essential wallet information for trading operations.
+- **Token Security Analysis**: Comprehensive token security and market information including price, market cap, creation time, liquidity, security factors, and trading data.
 
 **▶️ Quick Start:**
 ```json
@@ -113,7 +123,8 @@ Provides automated trading tasks like "Sell on Open" and "Follow Dev's Sell".
       "args": ["-y", "@dbotx/conditional-order-mcp-server@latest"],
       "env": {
         "DBOT_API_KEY": "your-api-key",
-        "DBOT_WALLET_ID": "your-wallet-id"
+        "DBOT_WALLET_ID_SOLANA": "your-solana-wallet-id",
+        "DBOT_WALLET_ID_EVM": "your-evm-wallet-id"
       }
     }
   }

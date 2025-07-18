@@ -14,8 +14,8 @@ Here is a summary of the features:
 - 💼 **Multi-Wallet Support**: Supports trading with multiple wallets simultaneously.
 - 📊 **Order Query**: Query transaction order status and details.
 - 📈 **Take-Profit/Stop-Loss**: Manage take-profit and stop-loss tasks.
-- 💳 **Wallet Management**: Query user wallets by chain type (Solana/EVM).
-- 🔐 **Token Security Check**: Get comprehensive token security information and pool safety details.
+- 💳 **Wallet Management**: Query user wallet IDs and addresses by chain type (Solana/EVM) - provides essential wallet information for trading operations, not balance data.
+- 🔐 **Token Security & Market Analysis**: Get comprehensive token information including security factors, price data, market cap, creation time, liquidity, trading volume, and pool safety details.
 
 ## Quick Start
 
@@ -319,16 +319,18 @@ Delete a take-profit/stop-loss order created by a fast swap.
 
 ### get_user_wallets
 
-Query user's wallets for a specific chain type. If no type is specified, it will query all types (solana and evm).
+Query user wallet IDs and addresses for a specific chain type. If no type is specified, it will query all types (solana and evm). This provides essential wallet information for trading operations, not balance data.
 
 **Parameters:**
 - `type` (string, optional): Chain type to query (solana/evm). If not specified, queries all types.
 - `page` (number, optional): Page number, defaults to 0.
 - `size` (number, optional): Number of results per page, defaults to 20.
 
+**Returns:** Wallet ID, name, type, and address for each wallet.
+
 ### get_token_security_info
 
-Get token security information and pool safety details. **Important: This tool should be called before making any trading transactions to check token security factors.**
+Get comprehensive token security and market analysis. **Important: This tool should be called before making any trading transactions to check token security factors and market conditions.**
 
 **Parameters:**
 - `chain` (string, optional): Chain name, defaults to 'solana'.
@@ -336,9 +338,10 @@ Get token security information and pool safety details. **Important: This tool s
 
 **Returns comprehensive token information including:**
 - Token and pool creation time
-- Price and market cap
+- Current price and market cap
+- Trading volume and liquidity data
 - Security factors (mint/freeze authority, top holder concentration)
-- Pool liquidity information
+- Pool liquidity and safety information
 - Relevant links (Birdeye, Jupiter, etc.)
 
 ## 📚 API Documentation
