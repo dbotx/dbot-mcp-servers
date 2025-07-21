@@ -1357,8 +1357,8 @@ class FastSwapMcpServer {
           const str = price.toFixed(20);
           const match = str.match(/^0\.0*(\d+)/);
           if (match) {
-            const leadingZeros = str.indexOf(match[1]) - 2; // 小数点后0的个数
-            const significantDigits = match[1].substring(0, 4); // 前4位有效数字
+            const leadingZeros = str.indexOf(match[1]) - 2;
+            const significantDigits = match[1].substring(0, 4);
 
             if (leadingZeros <= 4) {
               // 不使用缩写

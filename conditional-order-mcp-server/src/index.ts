@@ -1518,20 +1518,29 @@ class ConditionalOrderMcpServer {
       const formatPrice = (price: number): string => {
         if (price >= 1) {
           return `$${price.toFixed(2)}`;
-        } else if (price >= 0.0001) {
-          return `$${price.toFixed(4)}`;
         } else {
           const str = price.toFixed(20);
           const match = str.match(/^0\.0*(\d+)/);
           if (match) {
             const leadingZeros = str.indexOf(match[1]) - 2;
-            const subscriptNumbers = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
-            const subscript = leadingZeros.toString().split('').map(digit => subscriptNumbers[parseInt(digit)] || digit).join('');
-            // Limit to first 4 non-zero digits
             const significantDigits = match[1].substring(0, 4);
-            return `$0.0${subscript}${significantDigits}`;
+
+            if (leadingZeros <= 4) {
+              // 不使用缩写
+              const plain = `0.${'0'.repeat(leadingZeros)}${significantDigits}`;
+              return `$${plain}`;
+            } else {
+              // 使用下标缩写
+              const subscriptNumbers = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
+              const subscript = leadingZeros
+                .toString()
+                .split('')
+                .map(digit => subscriptNumbers[parseInt(digit)] || digit)
+                .join('');
+              return `$0.0${subscript}${significantDigits}`;
+            }
           }
-          return `$${price.toExponential(2)}`;
+          return `$${price.toExponential(2)}`; // fallback
         }
       };
 
