@@ -1,6 +1,6 @@
 {
   "name": "@dbotx/copy-trading-mcp-server",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Copy Trading MCP Server - Supports creating and managing complex copy trading tasks, automatically following other users' trading strategies",
   "keywords": ["mcp", "dbot", "copy-trading", "trading", "crypto", "blockchain", "DEX", "DeFi", "cross-chain", "solana", "ethereum", "bsc", "tron", "base", "smart-money"],
   "author": "dbotx",
